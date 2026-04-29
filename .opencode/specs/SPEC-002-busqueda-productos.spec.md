@@ -1,6 +1,6 @@
 ---
 id: SPEC-002
-status: DRAFT
+status: IMPLEMENTED
 feature: f2-busqueda-productos
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: [SPEC-003]
 
 # Spec: F2 — Búsqueda de Productos Financieros
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D1 (Listado — barra de búsqueda integrada)
 > **Tipo:** Requerido
 > **Depende de:** SPEC-001 (ProductListPage, ProductTableComponent)

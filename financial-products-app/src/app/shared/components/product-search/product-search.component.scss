@@ -1,0 +1,38 @@
+// ProductSearchComponent — Diseño D1
+// Campo de búsqueda integrado en el header azul
+
+$color-primary: #1a237e;
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 14px;
+  min-width: 220px;
+  transition: background-color 0.2s ease;
+
+  &:focus-within {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.search-icon {
+  font-size: 14px;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 13px;
+  width: 100%;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}

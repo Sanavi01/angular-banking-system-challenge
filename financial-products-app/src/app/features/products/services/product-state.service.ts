@@ -64,12 +64,24 @@ export class ProductStateService implements OnDestroy {
 
   private filterProducts(products: Product[], term: string): Product[] {
     if (!term || term.trim() === '') return products;
-    const t = term.trim().toLowerCase();
+    const normalizedTerm = this.normalizeText(term);
     return products.filter(
       (p) =>
-        p.name.toLowerCase().includes(t) ||
-        p.description.toLowerCase().includes(t),
+        this.normalizeText(p.name).includes(normalizedTerm) ||
+        this.normalizeText(p.description).includes(normalizedTerm),
     );
+  }
+
+  /**
+   * Normaliza texto eliminando tildes y diacríticos (á → a, ñ → n, ü → u)
+   * usando descomposición Unicode NFD.
+   * Ej: "Préstamos" → "prestamos", "Búsqueda" → "busqueda"
+   */
+  private normalizeText(text: string): string {
+    return text
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
   }
 
   ngOnDestroy(): void {
