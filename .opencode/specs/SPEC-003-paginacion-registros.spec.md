@@ -1,6 +1,6 @@
 ---
 id: SPEC-003
-status: DRAFT
+status: APPROVED
 feature: f3-paginacion-registros
 created: 2026-04-29
 updated: 2026-04-29
