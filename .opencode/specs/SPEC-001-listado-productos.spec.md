@@ -1,6 +1,6 @@
 ---
 id: SPEC-001
-status: DRAFT
+status: IMPLEMENTED
 feature: f1-listado-productos
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: [SPEC-002, SPEC-003]
 
 # Spec: F1 — Listado de Productos Financieros
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D1 (Listado)
 > **Tipo:** Requerido
 
