@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProductService } from '../../../../core/services/product.service';
@@ -18,7 +19,7 @@ import { ProductPaginationComponent } from '../../../../shared/components/produc
 @Component({
   selector: 'app-product-list-page',
   standalone: true,
-  imports: [CommonModule, ProductTableComponent, ProductSearchComponent, ProductPaginationComponent],
+  imports: [CommonModule, RouterModule, ProductTableComponent, ProductSearchComponent, ProductPaginationComponent],
   templateUrl: './product-list.page.html',
   styleUrls: ['./product-list.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

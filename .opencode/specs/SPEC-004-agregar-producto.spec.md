@@ -1,6 +1,6 @@
 ---
 id: SPEC-004
-status: APPROVED
+status: IMPLEMENTED
 feature: f4-agregar-producto
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: [SPEC-005]
 
 # Spec: F4 — Agregar Producto Financiero
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D2 (Formulario), D3 (Botón Agregar)
 > **Tipo:** Requerido
 > **Depende de:** SPEC-001 (ruta `/products`, ProductService base)

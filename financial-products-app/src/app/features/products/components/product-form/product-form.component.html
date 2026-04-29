@@ -1,0 +1,95 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="product-form" novalidate>
+  <h2 class="form-title">{{ isEditMode ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+
+  <!-- ID -->
+  <div class="form-field">
+    <label for="id">ID</label>
+    <input
+      id="id"
+      type="text"
+      formControlName="id"
+      placeholder="Ej: trj-crd"
+    />
+    <span *ngIf="getErrorMessage('id')" class="field-error">
+      {{ getErrorMessage('id') }}
+    </span>
+  </div>
+
+  <!-- Name -->
+  <div class="form-field">
+    <label for="name">Nombre</label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      placeholder="Ej: Tarjetas de Crédito"
+    />
+    <span *ngIf="getErrorMessage('name')" class="field-error">
+      {{ getErrorMessage('name') }}
+    </span>
+  </div>
+
+  <!-- Description -->
+  <div class="form-field">
+    <label for="description">Descripción</label>
+    <textarea
+      id="description"
+      formControlName="description"
+      placeholder="Descripción del producto"
+      rows="3"
+    ></textarea>
+    <span *ngIf="getErrorMessage('description')" class="field-error">
+      {{ getErrorMessage('description') }}
+    </span>
+  </div>
+
+  <!-- Logo -->
+  <div class="form-field">
+    <label for="logo">Logo (URL)</label>
+    <input
+      id="logo"
+      type="text"
+      formControlName="logo"
+      placeholder="https://example.com/logo.png"
+    />
+    <span *ngIf="getErrorMessage('logo')" class="field-error">
+      {{ getErrorMessage('logo') }}
+    </span>
+  </div>
+
+  <!-- Date Release -->
+  <div class="form-field">
+    <label for="date_release">Fecha de Liberación</label>
+    <input
+      id="date_release"
+      type="date"
+      formControlName="date_release"
+    />
+    <span *ngIf="getErrorMessage('date_release')" class="field-error">
+      {{ getErrorMessage('date_release') }}
+    </span>
+  </div>
+
+  <!-- Date Revision (auto-calculated, disabled) -->
+  <div class="form-field">
+    <label for="date_revision">Fecha de Revisión</label>
+    <input
+      id="date_revision"
+      type="date"
+      formControlName="date_revision"
+    />
+    <span class="field-hint">Calculada automáticamente: Fecha de Liberación + 1 año</span>
+  </div>
+
+  <!-- Buttons -->
+  <div class="form-actions">
+    <button type="button" class="btn-reset" (click)="onReset()">Reiniciar</button>
+    <button
+      type="submit"
+      class="btn-submit"
+      [disabled]="form.invalid || submitting"
+    >
+      {{ submitting ? 'Guardando...' : 'Agregar' }}
+    </button>
+  </div>
+</form>
