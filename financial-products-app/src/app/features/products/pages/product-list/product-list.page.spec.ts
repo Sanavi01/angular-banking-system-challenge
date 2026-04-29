@@ -137,10 +137,11 @@ describe('ProductListPage', () => {
       expect(brandIcon).toBeTruthy();
     });
 
-    it('should render search placeholder', () => {
-      const searchText = fixture.debugElement.query(By.css('.search-text'));
-      expect(searchText).toBeTruthy();
-      expect(searchText.nativeElement.textContent).toContain('Search...');
+    it('should render search component', () => {
+      const searchComponent = fixture.debugElement.query(
+        By.css('app-product-search'),
+      );
+      expect(searchComponent).toBeTruthy();
     });
 
     it('should render footer with results text', () => {

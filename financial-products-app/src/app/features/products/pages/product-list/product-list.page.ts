@@ -12,11 +12,12 @@ import { ProductStateService } from '../../services/product-state.service';
 import { Product } from '../../../../core/models/product.model';
 import { ApiError } from '../../../../core/models/api-error.model';
 import { ProductTableComponent } from '../../../../shared/components/product-table/product-table.component';
+import { ProductSearchComponent } from '../../../../shared/components/product-search/product-search.component';
 
 @Component({
   selector: 'app-product-list-page',
   standalone: true,
-  imports: [CommonModule, ProductTableComponent],
+  imports: [CommonModule, ProductTableComponent, ProductSearchComponent],
   templateUrl: './product-list.page.html',
   styleUrls: ['./product-list.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
