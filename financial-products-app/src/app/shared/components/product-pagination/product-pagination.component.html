@@ -1,0 +1,37 @@
+<div class="pagination-footer">
+  <span class="results-text">{{ resultsText }}</span>
+
+  <div class="pagination-controls">
+    <button
+      class="nav-btn"
+      [disabled]="isFirstPage"
+      (click)="goToPrevious()"
+      title="Página anterior"
+    >
+      ‹ Anterior
+    </button>
+
+    <span class="page-indicator">
+      Página {{ currentPage }} de {{ totalPages }}
+    </span>
+
+    <button
+      class="nav-btn"
+      [disabled]="isLastPage"
+      (click)="goToNext()"
+      title="Página siguiente"
+    >
+      Siguiente ›
+    </button>
+
+    <select
+      class="page-size-select"
+      [ngModel]="pageSize"
+      (ngModelChange)="onPageSizeSelect($event)"
+    >
+      <option *ngFor="let option of pageSizeOptions" [value]="option">
+        {{ option }}
+      </option>
+    </select>
+  </div>
+</div>

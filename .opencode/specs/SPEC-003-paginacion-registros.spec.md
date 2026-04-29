@@ -1,6 +1,6 @@
 ---
 id: SPEC-003
-status: APPROVED
+status: IMPLEMENTED
 feature: f3-paginacion-registros
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: [SPEC-002]
 
 # Spec: F3 — Paginación y Cantidad de Registros
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D1 (Listado — footer con contador y select)
 > **Tipo:** Requerido
 > **Depende de:** SPEC-001 (ProductListPage, ProductTableComponent)

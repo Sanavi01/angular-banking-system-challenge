@@ -13,11 +13,12 @@ import { Product } from '../../../../core/models/product.model';
 import { ApiError } from '../../../../core/models/api-error.model';
 import { ProductTableComponent } from '../../../../shared/components/product-table/product-table.component';
 import { ProductSearchComponent } from '../../../../shared/components/product-search/product-search.component';
+import { ProductPaginationComponent } from '../../../../shared/components/product-pagination/product-pagination.component';
 
 @Component({
   selector: 'app-product-list-page',
   standalone: true,
-  imports: [CommonModule, ProductTableComponent, ProductSearchComponent],
+  imports: [CommonModule, ProductTableComponent, ProductSearchComponent, ProductPaginationComponent],
   templateUrl: './product-list.page.html',
   styleUrls: ['./product-list.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
