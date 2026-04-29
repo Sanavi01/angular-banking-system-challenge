@@ -1,35 +1,41 @@
 ---
 name: frontend-task
-description: Implementa una funcionalidad en el frontend React/Vite basada en una spec ASDD aprobada.
-argument-hint: "<nombre-feature> (debe existir .github/specs/<nombre-feature>.spec.md)"
-agent: Frontend Developer
-tools:
-  - edit/createFile
-  - edit/editFiles
-  - read/readFile
-  - search/listDirectory
-  - search
-  - execute/runInTerminal
+description: Implementa una funcionalidad en el frontend Angular basada en una spec ASDD aprobada.
+argument-hint: "<nombre-feature> (debe existir .opencode/specs/<nombre-feature>.spec.md)"
 ---
 
-Implementa el frontend para el feature especificado, siguiendo la spec aprobada.
+# Prompt: /frontend-task
 
-**Feature**: ${input:featureName:nombre del feature en kebab-case}
+## Prerequisitos
+- Spec `.opencode/specs/<feature>.spec.md` con estado `APPROVED`.
+- Stack: Angular 14, SCSS, Jest.
 
-## Pasos obligatorios:
+## Flujo
 
-1. **Lee la spec** en `.github/specs/${input:featureName:nombre-feature}.spec.md` — si no existe, detente e informa al usuario.
-2. **Revisa el código existente** en `frontend/src/` para entender patrones actuales.
-3. **Implementa en orden**:
-   - `frontend/src/services/` — servicio con llamadas a API (si aplica)
-   - `frontend/src/hooks/` — hook custom (si hay estado complejo)
-   - `frontend/src/components/` — componentes reutilizables
-   - `frontend/src/pages/` — página + CSS Module
-4. **Registra la ruta** en `frontend/src/App.jsx`.
-5. **Verifica** el build: `cd frontend && npm run build`
+1. Lee la spec en `.opencode/specs/<feature>.spec.md` — si no existe, detente e informa.
+2. Lee las instrucciones: `.opencode/instructions/frontend.instructions.md`.
+3. Explora componentes y servicios existentes — no duplicar.
+4. Implementa en orden: services → models → components → pages → ruta.
+5. Verifica `ng build` sin errores.
 
-## Restricciones:
-- USAR CSS Modules exclusivamente — sin frameworks CSS globales.
-- El estado de autenticación SIEMPRE viene de `useAuth` hook.
-- Las variables de entorno deben usar prefijo `VITE_`.
-- Firebase tokens se obtienen del usuario actual y se envían como `Bearer` en el header de Authorization.
+## Orden de Implementación
+
+| Capa | Responsabilidad |
+|------|-----------------|
+| Services | Llamadas HTTP al backend |
+| Models | Interfaces TypeScript |
+| Components | Dumb — @Input/@Output, OnPush |
+| Pages | Smart — orquestan servicios, OnPush |
+| Rutas | Registrar en `app.routes.ts` |
+
+## Convenciones
+- Standalone components con `OnPush`.
+- SCSS puro, sin frameworks CSS.
+- `takeUntil(destroy$)` en suscripciones (Angular 14).
+- `PRODUCT_VALIDATORS` para validaciones compartidas.
+- `DateUtil` + `DateDisplayPipe` para fechas.
+
+## Restricciones
+- Solo en `src/app/`.
+- No generar tests (responsabilidad de test-engineer-frontend).
+- No frameworks CSS.
