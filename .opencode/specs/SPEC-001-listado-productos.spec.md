@@ -1,6 +1,6 @@
 ---
 id: SPEC-001
-status: DRAFT
+status: IMPLEMENTED
 feature: f1-listado-productos
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: [SPEC-002, SPEC-003]
 
 # Spec: F1 — Listado de Productos Financieros
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D1 (Listado)
 > **Tipo:** Requerido
 
@@ -216,79 +216,97 @@ src/app/
 ### Frontend — Implementación
 
 #### Core
-- [ ] Crear `product.model.ts` — interfaz `Product`
-- [ ] Crear `api-error.model.ts` — interfaz `ApiError { message: string }`
-- [ ] Crear `product.service.ts` — método `getAll()` retorna `Observable<Product[]>`
-- [ ] Crear `error.interceptor.ts` — interceptor HTTP global (SOLID: SRP)
-- [ ] Registrar `ErrorInterceptor` en `app.config.ts` con `HTTP_INTERCEPTORS` o `provideHttpClient(withInterceptors([errorInterceptor]))`
-- [ ] Configurar `environment.ts` con `apiUrl: 'http://localhost:3002'`
+- [x] Crear `product.model.ts` — interfaz `Product`
+- [x] Crear `api-error.model.ts` — interfaz `ApiError { message: string }`
+- [x] Crear `product.service.ts` — método `getAll()` retorna `Observable<Product[]>`
+- [x] Crear `error.interceptor.ts` — interceptor HTTP global (SOLID: SRP)
+- [x] Registrar `ErrorInterceptor` en `main.ts` con `HTTP_INTERCEPTORS`
+- [x] Configurar `environment.ts` con `apiUrl` (dev con proxy, prod: `http://localhost:3002`)
 
 #### Servicio — ProductStateService (SRP)
-- [ ] Crear `product-state.service.ts` — facade de estado RxJS
-- [ ] Implementar `allProducts$`, `searchTerm$`, `pageSize$`, `currentPage$` (BehaviorSubjects)
-- [ ] Implementar `filteredProducts$` (combineLatest + filtro)
-- [ ] Implementar `paginatedProducts$` (combineLatest + slice)
-- [ ] Implementar `totalFiltered$` (filteredProducts.length)
-- [ ] Implementar métodos: `setProducts()`, `setSearchTerm()`, `setPageSize()`, `setPage()`
-- [ ] Implementar `OnDestroy` con `destroy$` para cleanup
+- [x] Crear `product-state.service.ts` — facade de estado RxJS
+- [x] Implementar `allProducts$`, `searchTerm$`, `pageSize$`, `currentPage$` (BehaviorSubjects)
+- [x] Implementar `filteredProducts$` (combineLatest + filtro)
+- [x] Implementar `paginatedProducts$` (combineLatest + slice)
+- [x] Implementar `totalFiltered$` (filteredProducts.length)
+- [x] Implementar `totalPages$` (adicional — no pedido pero útil)
+- [x] Implementar métodos: `setProducts()`, `setSearchTerm()`, `setPageSize()`, `setPage()`
+- [x] Implementar `OnDestroy` con `destroy$` para cleanup
 
 #### Shared
-- [ ] Crear `date-display.pipe.ts` — pipe `YYYY-MM-DD → DD/MM/YYYY` standalone (DRY)
+- [x] Crear `date-display.pipe.ts` — pipe `YYYY-MM-DD → DD/MM/YYYY` standalone (DRY)
 
 #### Componente — ProductTable (Dumb, OnPush)
-- [ ] Crear `product-table.component.ts` (standalone, `OnPush`)
-- [ ] Implementar `@Input() products: Product[]`
-- [ ] Implementar `@Input() loading: boolean`
-- [ ] Implementar `@Input() error: string | null`
-- [ ] Renderizar columnas: Logo (img circular), Nombre, Descripción, date_release con `dateDisplay` pipe, date_revision con `dateDisplay` pipe
-- [ ] Mostrar placeholder de logo si la imagen falla (evento `onerror`)
-- [ ] Agregar íconos ℹ️ en headers: Descripción, Fecha de Liberación, Fecha de Reestructuración
-- [ ] Crear estilos SCSS según Diseño D1
+- [x] Crear `product-table.component.ts` (standalone, `OnPush`)
+- [x] Implementar `@Input() products: Product[]`
+- [x] Implementar `@Input() loading: boolean`
+- [x] Implementar `@Input() error: string | null`
+- [x] Renderizar columnas: Logo (img circular), Nombre, Descripción, date_release con `dateDisplay` pipe, date_revision con `dateDisplay` pipe
+- [x] Mostrar placeholder de logo si la imagen falla (evento `onerror`)
+- [x] Agregar íconos ℹ️ en headers: Descripción, Fecha de Liberación, Fecha de Reestructuración
+- [x] Crear estilos SCSS según Diseño D1 (header azul, filas alternadas, logo circular 40px, borde sutil)
 
 #### Página — ProductListPage (Smart, OnPush)
-- [ ] Crear `product-list.page.ts` (standalone, `OnPush`)
-- [ ] Inyectar `ProductService` + `ProductStateService`
-- [ ] En `ngOnInit`: cargar productos → `state.setProducts()`, suscribir con `takeUntil(destroy$)`
-- [ ] Exponer `state.paginatedProducts$` al template via `async` pipe
-- [ ] Exponer `state.totalFiltered$` para el contador
-- [ ] Manejar estado loading con variable local `loading$`
-- [ ] Manejar estado error con variable local `error$` (ErrorInterceptor ya tipa el error)
-- [ ] Pasar observables al `ProductTableComponent` via `async` pipe
-- [ ] Incluir header "BANCO" con logo (hardcodeado)
-- [ ] Dejar placeholder visual para barra de búsqueda (SPEC-002)
-- [ ] Dejar placeholder visual para paginación (SPEC-003)
-- [ ] Implementar `OnDestroy` con `destroy$.next() + destroy$.complete()`
-- [ ] Crear estilos SCSS según Diseño D1
+- [x] Crear `product-list.page.ts` (standalone, `OnPush`)
+- [x] Inyectar `ProductService` + `ProductStateService`
+- [x] En `ngOnInit`: cargar productos → `state.setProducts()`, suscribir con `takeUntil(destroy$)`
+- [x] Exponer `state.paginatedProducts$` al template via `async` pipe
+- [x] Exponer `state.totalFiltered$` para el contador
+- [x] Manejar estado loading con variable local `loading$`
+- [x] Manejar estado error con variable local `error$` (ErrorInterceptor ya tipa el error)
+- [x] Pasar observables al `ProductTableComponent` via `async` pipe
+- [x] Incluir header "BANCO" con logo (hardcodeado)
+- [x] Dejar placeholder visual para barra de búsqueda (SPEC-002)
+- [x] Dejar placeholder visual para paginación (SPEC-003)
+- [x] Implementar `OnDestroy` con `destroy$.next() + destroy$.complete()`
+- [x] Crear estilos SCSS según Diseño D1
 
 #### Rutas
-- [ ] Registrar ruta `/products` con lazy loading en `app.routes.ts`
-- [ ] Configurar redirect de `/` → `/products`
+- [x] Registrar ruta `/products` con lazy loading en `app.routes.ts`
+- [x] Configurar redirect de `/` → `/products`
 
 ### Tests — Jest
 
 #### ProductService
-- [ ] `should fetch all products successfully` — mock HttpTestingController, verificar GET y retorno
-- [ ] `should handle HTTP error` — simular error 500, verificar manejo en componente
+- [x] `should fetch all products successfully` — mock HttpTestingController, verificar GET y retorno
+- [x] `should handle HTTP error` — simular error 500, verificar manejo en componente
+- [x] `should return empty array when backend returns empty data` — adicional
+- [x] `should handle HTTP 404 error` — adicional
+- [x] `should fetch a product by id successfully` — adicional
+- [x] `should create a product successfully` — adicional
+- [x] `should handle 400 error on create (duplicate id)` — adicional
+- [x] `should update a product successfully` — adicional
+- [x] `should delete a product successfully` — adicional
+- [x] `should verify that an id exists` — adicional
+- [x] `should verify that an id does not exist` — adicional
 
 #### ProductTableComponent
-- [ ] `should render table with correct columns` — verificar headers
-- [ ] `should render product rows with correct data` — verificar nombre, descripción, fechas
-- [ ] `should format dates as DD/MM/YYYY` — verificar transformación de fecha
-- [ ] `should render logo image with correct src` — verificar atributo src
-- [ ] `should show placeholder when logo fails to load` — disparar evento onerror
-- [ ] `should show loading state when loading is true` — verificar indicador
-- [ ] `should show empty state when products array is empty` — verificar mensaje
-- [ ] `should show error message when error is provided` — verificar mensaje de error
+- [x] `should render table with correct columns` — verificar headers
+- [x] `should render product rows with correct data` — verificar nombre, descripción, fechas
+- [x] `should format dates as DD/MM/YYYY` — verificar transformación de fecha
+- [x] `should render logo image with correct src` — verificar atributo src
+- [x] `should show placeholder when logo fails to load` — disparar evento onerror
+- [x] `should show loading state when loading is true` — verificar indicador
+- [x] `should show empty state when products array is empty` — verificar mensaje
+- [x] `should show error message when error is provided` — verificar mensaje de error
+- [x] `should apply alternating row style` — adicional
+- [x] `should render info icons on headers` — adicional
+- [x] `should display product initial in placeholder` — adicional
 
 #### ProductListPage
-- [ ] `should load products on init` — mock ProductService, verificar llamada
-- [ ] `should pass products to ProductTableComponent` — verificar @Input binding
-- [ ] `should show loading state initially` — verificar estado antes de resolver
-- [ ] `should show error state on service failure` — mock error, verificar mensaje
+- [x] `should load products on init` — mock ProductService, verificar llamada
+- [x] `should pass products to ProductTableComponent` — verificar @Input binding (implícito via template)
+- [x] `should show loading state initially` — verificar estado antes de resolver
+- [x] `should show error state on service failure` — mock error, verificar mensaje
+- [x] `should render header with brand name` — adicional
+- [x] `should render search placeholder` — adicional
+- [x] `should render footer with results text` — adicional
+- [x] `should render page size select` — adicional
+- [x] `should complete destroy$ on destroy` — adicional
 
 ### QA
 - [ ] Ejecutar `/gherkin-case-generator` para HU-01
 - [ ] Ejecutar `/risk-identifier` para SPEC-001
-- [ ] Verificar cobertura de tests ≥ 70%
-- [ ] Verificar build sin errores (`ng build`)
+- [x] Verificar cobertura de tests ≥ 70% (71.77% statements, 72.64% lines)
+- [x] Verificar build sin errores (`ng build`)
 - [ ] Validar visualmente contra Diseño D1

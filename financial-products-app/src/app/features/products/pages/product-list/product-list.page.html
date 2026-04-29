@@ -1,0 +1,39 @@
+<div class="page">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="brand">
+        <span class="brand-icon">🏦</span>
+        <span class="brand-text">BANCO</span>
+      </div>
+      <div class="search-placeholder">
+        <span class="search-icon">🔍</span>
+        <span class="search-text">Search...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content-wrapper">
+      <!-- Table -->
+      <app-product-table
+        [products]="(state.paginatedProducts$ | async) ?? []"
+        [loading]="(loading$ | async) ?? false"
+        [error]="error$ | async"
+      ></app-product-table>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <span class="results-text">
+          {{ (state.totalFiltered$ | async) ?? 0 }} resultados
+        </span>
+        <div class="page-size-placeholder">
+          <select class="select">
+            <option value="5">5</option>
+          </select>
+        </div>
+      </footer>
+    </div>
+  </main>
+</div>
