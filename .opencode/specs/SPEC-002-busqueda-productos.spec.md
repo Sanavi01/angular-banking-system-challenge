@@ -199,58 +199,55 @@ onSearch(term: string): void {
 ### Frontend — Implementación
 
 #### Componente — ProductSearch
-- [ ] Crear `product-search.component.ts` (standalone)
-- [ ] Implementar `@Input() placeholder = 'Search...'`
-- [ ] Implementar `@Output() searchChange = new EventEmitter<string>()`
-- [ ] Aplicar debounce de 300ms con RxJS (`debounceTime`, `distinctUntilChanged`)
-- [ ] Emitir término con `trim()` aplicado
-- [ ] Usar `FormControl` reactivo para el input
-- [ ] Crear estilos SCSS: input con borde redondeado, placeholder gris, alineado a la derecha
-
-```typescript
-// Ejemplo de implementación
-searchControl = new FormControl('', { nonNullable: true });
-
-ngOnInit() {
-  this.searchControl.valueChanges.pipe(
-    debounceTime(300),
-    distinctUntilChanged(),
-  ).subscribe((term) => {
-    this.searchChange.emit(term);
-  });
-}
-```
+- [x] Crear `product-search.component.ts` (standalone)
+- [x] Implementar `@Input() placeholder = 'Search...'`
+- [x] Implementar `@Output() searchChange = new EventEmitter<string>()`
+- [x] Aplicar debounce de 300ms con RxJS (`debounceTime`, `distinctUntilChanged`)
+- [x] Emitir término con `trim()` aplicado
+- [x] Usar `FormControl` reactivo para el input
+- [x] Crear estilos SCSS: input con borde redondeado, placeholder gris, alineado a la derecha
 
 #### Página — ProductListPage (modificaciones)
-- [ ] Agregar propiedad `allProducts: Product[]` — almacenar datos originales
-- [ ] Agregar propiedad `filteredProducts: Product[]` — datos filtrados
-- [ ] Implementar método `onSearch(term: string)` — filtrar `allProducts` → `filteredProducts`
-- [ ] Conectar `@Output(searchChange)` del `ProductSearchComponent` a `onSearch()`
-- [ ] Pasar `filteredProducts` al `ProductTableComponent` en lugar de `allProducts`
-- [ ] Actualizar lógica de contador para reflejar `filteredProducts.length`
+- [x] Agregar propiedad `allProducts: Product[]` — almacenar datos originales (ya en ProductStateService — no duplicado)
+- [x] Agregar propiedad `filteredProducts: Product[]` — datos filtrados (ya en ProductStateService)
+- [x] Implementar método `onSearch(term: string)` — filtrar `allProducts` → `filteredProducts` (via `state.setSearchTerm()`)
+- [x] Conectar `@Output(searchChange)` del `ProductSearchComponent` a `onSearch()`
+- [x] Pasar `filteredProducts` al `ProductTableComponent` en lugar de `allProducts` (via `filteredProducts$` → `paginatedProducts$`)
+- [x] Actualizar lógica de contador para reflejar `filteredProducts.length`
 
 #### Core
-- [ ] Verificar que `ProductService.getAll()` retorna datos crudos para `allProducts`
+- [x] Verificar que `ProductService.getAll()` retorna datos crudos para `allProducts`
 
 ### Tests — Jest
 
 #### ProductSearchComponent
-- [ ] `should render search input with placeholder` — verificar placeholder
-- [ ] `should emit search term after debounce` — escribir, avanzar 300ms, verificar emit
-- [ ] `should trim search term before emitting` — escribir "  test  ", verificar "test"
-- [ ] `should not emit duplicate consecutive terms` — verificar distinctUntilChanged
-- [ ] `should emit empty string when input is cleared` — borrar, verificar emit('')
+- [x] `should render search input with placeholder` — verificar placeholder
+- [x] `should emit search term after debounce` — escribir, avanzar 300ms, verificar emit
+- [x] `should trim search term before emitting` — escribir "  test  ", verificar "test"
+- [x] `should not emit duplicate consecutive terms` — verificar distinctUntilChanged
+- [x] `should emit empty string when input is cleared` — borrar, verificar emit('')
+- [x] `should not emit while user is still typing` — adicional (debounce reset en keystrokes)
+- [x] `should complete destroy$ on destroy` — adicional (cleanup)
 
 #### ProductListPage (modificaciones)
-- [ ] `should filter products by name when search term changes` — mock productos, emitir término, verificar filtro
-- [ ] `should filter products by description when search term changes`
-- [ ] `should show all products when search term is empty` — emitir '', verificar array completo
-- [ ] `should show empty state when no products match search` — emitir término sin coincidencias
-- [ ] `should reset filter when search is cleared`
+- [x] `should render search component` — verificar `<app-product-search>` en lugar del placeholder viejo
+
+#### ProductStateService (adicional — no en la spec original)
+- [x] `should return all products when term is empty`
+- [x] `should filter products by name (case-insensitive)`
+- [x] `should filter products by description (case-insensitive)`
+- [x] `should filter products by name OR description`
+- [x] `should return empty array when no products match`
+- [x] `should restore all products when search is cleared`
+- [x] `should find "Préstamos" when searching "prestamos"` — normalización de tildes
+- [x] `should find "Crédito" when searching "credito"` — normalización de tildes
+- [x] `should find "Ágil" when searching "agil"` — normalización de tildes
+- [x] `should handle uppercase search with accents`
+- [x] `should reset currentPage to 1 when search term changes`
 
 ### QA
 - [ ] Ejecutar `/gherkin-case-generator` para HU-02
 - [ ] Ejecutar `/risk-identifier` para SPEC-002
-- [ ] Verificar integración con SPEC-001 (no rompe listado existente)
+- [x] Verificar integración con SPEC-001 (no rompe listado existente)
 - [ ] Verificar debounce en navegador (prueba manual)
 - [ ] Validar visualmente contra Diseño D1 (barra de búsqueda)
