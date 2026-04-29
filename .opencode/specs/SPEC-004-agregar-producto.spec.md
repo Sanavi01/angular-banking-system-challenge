@@ -1,6 +1,6 @@
 ---
 id: SPEC-004
-status: DRAFT
+status: APPROVED
 feature: f4-agregar-producto
 created: 2026-04-29
 updated: 2026-04-29
