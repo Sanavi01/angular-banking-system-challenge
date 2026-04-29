@@ -9,8 +9,8 @@ export class ProductStateService implements OnDestroy {
 
   private readonly allProducts$ = new BehaviorSubject<Product[]>([]);
   private readonly searchTerm$ = new BehaviorSubject<string>('');
-  private readonly pageSize$ = new BehaviorSubject<number>(5);
-  private readonly currentPage$ = new BehaviorSubject<number>(1);
+  readonly pageSize$ = new BehaviorSubject<number>(5);
+  readonly currentPage$ = new BehaviorSubject<number>(1);
 
   readonly filteredProducts$: Observable<Product[]> = combineLatest([
     this.allProducts$,
