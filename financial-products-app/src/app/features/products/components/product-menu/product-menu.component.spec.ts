@@ -64,19 +64,6 @@ describe('ProductMenuComponent', () => {
     expect(emitSpy).toHaveBeenCalledWith('trj-crd');
   });
 
-  it('should emit delete event with productId when "Eliminar" is clicked', () => {
-    const emitSpy = jest.spyOn(component.delete, 'emit');
-
-    const trigger = fixture.debugElement.query(By.css('.menu-trigger'));
-    trigger.triggerEventHandler('click', { stopPropagation: () => {} });
-    fixture.detectChanges();
-
-    const deleteBtn = fixture.debugElement.queryAll(By.css('.menu-item'))[1];
-    deleteBtn.nativeElement.click();
-
-    expect(emitSpy).toHaveBeenCalledWith('trj-crd');
-  });
-
   it('should close dropdown when clicking outside', () => {
     component.isOpen = true;
     fixture.detectChanges();
@@ -87,14 +74,13 @@ describe('ProductMenuComponent', () => {
     expect(component.isOpen).toBe(false);
   });
 
-  it('should render "Editar" and "Eliminar" options in dropdown', () => {
+  it('should render "Editar" option in dropdown', () => {
     const trigger = fixture.debugElement.query(By.css('.menu-trigger'));
     trigger.triggerEventHandler('click', { stopPropagation: () => {} });
     fixture.detectChanges();
 
     const items = fixture.debugElement.queryAll(By.css('.menu-item'));
-    expect(items.length).toBe(2);
+    expect(items.length).toBe(1);
     expect(items[0].nativeElement.textContent.trim()).toBe('Editar');
-    expect(items[1].nativeElement.textContent.trim()).toBe('Eliminar');
   });
 });

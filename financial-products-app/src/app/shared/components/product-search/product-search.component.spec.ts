@@ -46,7 +46,7 @@ describe('ProductSearchComponent', () => {
     it('should emit search term after debounce of 300ms', fakeAsync(() => {
       const emitSpy = jest.spyOn(component.searchChange, 'emit');
 
-      setInputValue('tarjeta');
+      component.searchControl.setValue('tarjeta');
       tick(100); // Antes del debounce
       expect(emitSpy).not.toHaveBeenCalled();
 
@@ -57,11 +57,11 @@ describe('ProductSearchComponent', () => {
     it('should not emit while user is still typing (debounce reset)', fakeAsync(() => {
       const emitSpy = jest.spyOn(component.searchChange, 'emit');
 
-      setInputValue('t');
+      component.searchControl.setValue('t');
       tick(200);
-      setInputValue('ta');
+      component.searchControl.setValue('ta');
       tick(200);
-      setInputValue('tar');
+      component.searchControl.setValue('tar');
       tick(200);
       // Still not emitted (debounce resets on each keystroke)
       expect(emitSpy).not.toHaveBeenCalled();
@@ -74,7 +74,7 @@ describe('ProductSearchComponent', () => {
     it('should trim search term before emitting', fakeAsync(() => {
       const emitSpy = jest.spyOn(component.searchChange, 'emit');
 
-      setInputValue('  crédito  ');
+      component.searchControl.setValue('  crédito  ');
       tick(300);
 
       expect(emitSpy).toHaveBeenCalledWith('crédito');
@@ -83,12 +83,12 @@ describe('ProductSearchComponent', () => {
     it('should not emit duplicate consecutive terms', fakeAsync(() => {
       const emitSpy = jest.spyOn(component.searchChange, 'emit');
 
-      setInputValue('tarjeta');
+      component.searchControl.setValue('tarjeta');
       tick(300);
       expect(emitSpy).toHaveBeenCalledTimes(1);
 
       // Set same value again — should not emit via distinctUntilChanged
-      setInputValue('tarjeta');
+      component.searchControl.setValue('tarjeta');
       tick(300);
       expect(emitSpy).toHaveBeenCalledTimes(1);
     }));
@@ -97,12 +97,12 @@ describe('ProductSearchComponent', () => {
       const emitSpy = jest.spyOn(component.searchChange, 'emit');
 
       // Type something first
-      setInputValue('tarjeta');
+      component.searchControl.setValue('tarjeta');
       tick(300);
       expect(emitSpy).toHaveBeenCalledWith('tarjeta');
 
       // Clear
-      setInputValue('');
+      component.searchControl.setValue('');
       tick(300);
       expect(emitSpy).toHaveBeenCalledWith('');
     }));
@@ -110,11 +110,11 @@ describe('ProductSearchComponent', () => {
     it('should emit different values on consecutive changes', fakeAsync(() => {
       const emitSpy = jest.spyOn(component.searchChange, 'emit');
 
-      setInputValue('tarjeta');
+      component.searchControl.setValue('tarjeta');
       tick(300);
       expect(emitSpy).toHaveBeenCalledWith('tarjeta');
 
-      setInputValue('cuenta');
+      component.searchControl.setValue('cuenta');
       tick(300);
       expect(emitSpy).toHaveBeenCalledWith('cuenta');
 
@@ -134,12 +134,3 @@ describe('ProductSearchComponent', () => {
     });
   });
 });
-
-/**
- * Helper to simulate user typing in the FormControl.
- */
-function setInputValue(value: string): void {
-  const input = document.querySelector('input')!;
-  input.value = value;
-  input.dispatchEvent(new Event('input'));
-}

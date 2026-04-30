@@ -47,7 +47,7 @@ describe('ProductFormComponent', () => {
       const buttons = fixture.debugElement.queryAll(By.css('button'));
       const btnTexts = buttons.map((b) => b.nativeElement.textContent.trim());
       expect(btnTexts).toContain('Reiniciar');
-      expect(btnTexts).toContain('Enviar');
+      expect(btnTexts).toContain('Agregar');
     });
   });
 
