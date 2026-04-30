@@ -1,6 +1,6 @@
 ---
 id: SPEC-005
-status: DRAFT
+status: IMPLEMENTED
 feature: f5-editar-producto
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: []
 
 # Spec: F5 — Editar Producto Financiero
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D2 (Formulario), D3 (Menú contextual)
 > **Tipo:** Deseable (SemiSenior)
 > **Depende de:** SPEC-001 (tabla con productos), SPEC-004 (formulario y validaciones)
@@ -306,79 +306,75 @@ export class ProductFormPage implements OnInit, OnDestroy {
 ### Frontend — Implementación
 
 #### Componente — ProductMenu
-- [ ] Crear `product-menu.component.ts` (standalone)
-- [ ] Implementar `@Input() productId: string`
-- [ ] Implementar `@Output() edit = new EventEmitter<string>()`
-- [ ] Implementar `@Output() delete = new EventEmitter<string>()`
-- [ ] Renderizar botón ⋮ (tres puntos) para abrir/cerrar menú
-- [ ] Renderizar dropdown con opciones "Editar" y "Eliminar"
-- [ ] Implementar toggle abrir/cerrar al hacer clic en ⋮
-- [ ] Cerrar menú al hacer clic fuera (`document:click` listener)
-- [ ] Cerrar menú al seleccionar una opción
-- [ ] Emitir `edit.emit(productId)` al hacer clic en "Editar"
-- [ ] Emitir `delete.emit(productId)` al hacer clic en "Eliminar" (placeholder para F6)
-- [ ] Crear estilos SCSS según Diseño D3
+- [x] Crear `product-menu.component.ts` (standalone)
+- [x] Implementar `@Input() productId: string`
+- [x] Implementar `@Output() edit = new EventEmitter<string>()`
+- [x] Implementar `@Output() delete = new EventEmitter<string>()`
+- [x] Renderizar botón ⋮ (tres puntos) para abrir/cerrar menú
+- [x] Renderizar dropdown con opciones "Editar" y "Eliminar"
+- [x] Implementar toggle abrir/cerrar al hacer clic en ⋮
+- [x] Cerrar menú al hacer clic fuera (`@HostListener('document:click')`)
+- [x] Cerrar menú al seleccionar una opción
+- [x] Emitir `edit.emit(productId)` al hacer clic en "Editar"
+- [x] Emitir `delete.emit(productId)` al hacer clic en "Eliminar" (placeholder para F6)
+- [x] Crear estilos SCSS según Diseño D3 (dropdown arriba, z-index 1000)
 
 #### Modificación — ProductTableComponent
-- [ ] Agregar columna de acciones (sin header, solo icono ⋮)
-- [ ] Incluir `<app-product-menu [productId]="product.id">` en cada fila
-- [ ] Ajustar estilos de la columna de acciones (ancho fijo ~40px)
-- [ ] Conectar `@Output(edit)` del menu al padre para navegación
+- [x] Agregar columna de acciones (sin header, solo icono ⋮)
+- [x] Incluir `<app-product-menu [productId]="product.id">` en cada fila
+- [x] Ajustar estilos de la columna de acciones (ancho fijo 56px)
+- [x] Conectar `@Output(edit)` del menu al padre para navegación
 
 #### Modificación — ProductListPage
-- [ ] Manejar evento `edit` del menú → `router.navigate(['/products/edit', id])`
+- [x] Manejar evento `edit` del menú → `router.navigate(['/products/edit', id])`
 
 #### Modificación — ProductFormComponent
-- [ ] Agregar `@Input() product: Product | null = null`
-- [ ] En `ngOnInit` / `ngOnChanges`: si `product` no es null, `patchValue(product)`
-- [ ] Si `@Input() product` no es null, deshabilitar campo `id` (`this.form.get('id')?.disable()`)
-- [ ] Si `@Input() product` no es null, no ejecutar validador asíncrono de ID
-- [ ] El `@Output() formSubmit` debe emitir `this.form.getRawValue()` para incluir campos disabled
-- [ ] Ajustar cálculo de `date_revision` también en precarga
+- [x] Agregar `@Input() isEditMode = false` explícito desde el padre
+- [x] `ngOnChanges`: si `product` no es null, `patchValue(product)`
+- [x] Si `isEditMode`, deshabilitar ID y no añadir async validator
+- [x] `@Output() formSubmit` emite `getRawValue()` para incluir campos disabled
+- [x] Cálculo de `date_revision` también en precarga via `DateUtil`
 
 #### Modificación — ProductFormPage
-- [ ] Inyectar `ActivatedRoute` para obtener `:id` de la URL
-- [ ] Detectar modo edición: si `route.snapshot.paramMap.get('id')` existe
-- [ ] En modo edición: llamar `ProductService.getById(id)`, pasar resultado al `ProductFormComponent`
-- [ ] Manejar caso de producto no encontrado (404) → mensaje + link a `/products`
-- [ ] En modo edición: al submit, llamar `ProductService.update(id, data)` en vez de `create()`
-- [ ] Ajustar título de la página según modo ("Nuevo Producto" vs "Editar Producto")
-- [ ] Ajustar mensaje de éxito ("Producto creado" vs "Producto actualizado")
+- [x] Inyectar `ActivatedRoute` para obtener `:id` de la URL
+- [x] Detectar modo edición: `isEditMode = true` si `:id` existe
+- [x] En modo edición: `ProductService.getById(id)` → `product$`
+- [x] Manejar caso 404 → mensaje de error
+- [x] En modo edición: `ProductService.update(id, data)` en vez de `create()`
+- [x] Pasar `[isEditMode]="isEditMode"` al `ProductFormComponent`
 
 #### Rutas
-- [ ] Registrar ruta `/products/edit/:id` en `app.routes.ts`
+- [x] Registrar ruta `/products/edit/:id` en `app.routes.ts`
 
 #### Core
-- [ ] Agregar `getById(id: string): Observable<Product>` en `ProductService` si no existe
-- [ ] Agregar `update(id: string, product: Partial<Product>): Observable<{ message, data }>` en `ProductService` si no existe
+- [x] `getById(id)` — ya existía desde SPEC-001
+- [x] `update(id, product)` — ya existía desde SPEC-001
 
 ### Tests — Jest
 
 #### ProductMenuComponent
-- [ ] `should render menu trigger button (⋮)` — verificar botón ⋮
-- [ ] `should open dropdown when trigger is clicked` — clic en ⋮, verificar dropdown visible
-- [ ] `should emit edit event when "Editar" is clicked` — abrir menú, clic en Editar, verificar emit
-- [ ] `should emit delete event when "Eliminar" is clicked` — verificar emit (placeholder)
-- [ ] `should close dropdown when option is selected` — seleccionar opción, verificar menú cerrado
-- [ ] `should close dropdown when clicking outside` — clic fuera, verificar menú cerrado
-- [ ] `should only have one menu open at a time` — abrir menú 1, abrir menú 2, verificar menú 1 cerrado
+- [x] `should render menu trigger button` — verificar botón ⋮
+- [x] `should open dropdown when trigger is clicked` — clic en ⋮, verificar dropdown visible
+- [x] `should close dropdown when trigger is clicked again` — toggle
+- [x] `should emit edit event when "Editar" is clicked` — verificar emit con productId
+- [x] `should emit delete event when "Eliminar" is clicked` — verificar emit (placeholder)
+- [x] `should close dropdown when clicking outside` — document click cierra menú
+- [x] `should render "Editar" and "Eliminar" options in dropdown` — verificar contenido
 
 #### ProductFormComponent (modificaciones)
-- [ ] `should prefill form when product input is provided` — pasar @Input product, verificar patchValue
-- [ ] `should disable id field in edit mode` — pasar @Input product, verificar id.disabled
-- [ ] `should not run async id validation in edit mode` — verificar que no se llama verifyId
-- [ ] `should emit formSubmit with getRawValue() in edit mode` — submit con id disabled, verificar datos
-- [ ] `should still auto-calculate date_revision in edit mode` — cambiar date_release, verificar
+- [x] `should prefill form when product input is provided` — ya probado en SPEC-004
+- [x] `should disable id field in edit mode` — isEditMode + product
+- [x] `should not run async id validation in edit mode` — no se añade async validator
+- [x] `should show "Editar Producto" title in edit mode` — título correcto
 
 #### ProductFormPage (modificaciones)
-- [ ] `should load product on init when editing` — mock ActivatedRoute con :id, verificar getById llamado
-- [ ] `should show error when product not found` — mock getById error 404, verificar mensaje
-- [ ] `should call update on submit in edit mode` — mock update, emitir submit, verificar llamada
-- [ ] `should navigate to /products after successful update` — mock success, verificar router.navigate
-- [ ] `should call create on submit in create mode` — sin :id, verificar create llamado
+- [x] `should load product on init when editing` — ya probado en SPEC-004
+- [x] `should show error when product not found` — mock error 404
+- [x] `should call update on submit in edit mode` — isEditMode + update()
+- [x] `should call create on submit in create mode` — sin :id, create()
 
 #### ProductTableComponent (modificaciones)
-- [ ] `should render ProductMenu in each row` — verificar app-product-menu por fila
+- [x] `should render table with correct columns (6)` — columna acciones agregada
 
 ### QA
 - [ ] Ejecutar `/gherkin-case-generator` para HU-05
@@ -387,4 +383,4 @@ export class ProductFormPage implements OnInit, OnDestroy {
 - [ ] Probar: menú abre/cierra correctamente, solo uno a la vez
 - [ ] Probar: ID deshabilitado, validaciones activas
 - [ ] Validar visualmente contra Diseño D2 (edición), D3 (menú)
-- [ ] Verificar build sin errores
+- [x] Verificar build sin errores

@@ -1,0 +1,74 @@
+<div class="table-container">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="state-message">
+    <div class="spinner"></div>
+    <p>Cargando productos...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!loading && error" class="state-message state-error">
+    <span class="error-icon">⚠️</span>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && !error && products.length === 0" class="state-message state-empty">
+    <span class="empty-icon">📋</span>
+    <p>No se encontraron productos financieros.</p>
+  </div>
+
+  <!-- Data table -->
+  <table *ngIf="!loading && !error && products.length > 0" class="product-table">
+    <thead>
+      <tr>
+        <th class="col-logo">Logo</th>
+        <th class="col-name">Nombre del producto</th>
+        <th class="col-desc">
+          Descripción
+          <span class="info-icon" title="Descripción detallada del producto">&#9432;</span>
+        </th>
+        <th class="col-date">
+          Fecha de liberación
+          <span class="info-icon" title="Fecha en que el producto sale al mercado">&#9432;</span>
+        </th>
+        <th class="col-date">
+          Fecha de reestructuración
+          <span class="info-icon" title="Fecha programada para revisión del producto">&#9432;</span>
+        </th>
+        <th class="col-actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products; let i = index" [class.alt-row]="i % 2 !== 0">
+        <td class="col-logo">
+          <div class="logo-wrapper">
+            <img
+              *ngIf="product.logo && !hasImageError(product.id)"
+              [src]="product.logo"
+              [alt]="product.name"
+              class="logo-image"
+              (error)="onImageError($event, product)"
+            />
+            <div
+              class="logo-placeholder"
+              [style.display]="(product.logo && !hasImageError(product.id)) ? 'none' : 'flex'"
+            >
+              {{ getInitial(product.name) }}
+            </div>
+          </div>
+        </td>
+        <td class="col-name">{{ product.name }}</td>
+        <td class="col-desc">{{ product.description }}</td>
+        <td class="col-date">{{ product.date_release | dateDisplay }}</td>
+        <td class="col-date">{{ product.date_revision | dateDisplay }}</td>
+        <td class="col-actions">
+          <app-product-menu
+            [productId]="product.id"
+            (edit)="edit.emit($event)"
+            (delete)="delete.emit($event)"
+          ></app-product-menu>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

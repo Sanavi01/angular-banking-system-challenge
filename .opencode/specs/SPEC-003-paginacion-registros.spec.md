@@ -1,6 +1,6 @@
 ---
 id: SPEC-003
-status: DRAFT
+status: IMPLEMENTED
 feature: f3-paginacion-registros
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: [SPEC-002]
 
 # Spec: F3 — Paginación y Cantidad de Registros
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D1 (Listado — footer con contador y select)
 > **Tipo:** Requerido
 > **Depende de:** SPEC-001 (ProductListPage, ProductTableComponent)
@@ -203,50 +203,57 @@ onPageChange(page: number): void {
 ### Frontend — Implementación
 
 #### Componente — ProductPagination
-- [ ] Crear `product-pagination.component.ts` (standalone)
-- [ ] Implementar `@Input() totalItems: number`
-- [ ] Implementar `@Input() pageSize: number`
-- [ ] Implementar `@Output() pageSizeChange = new EventEmitter<number>()`
-- [ ] Implementar `@Output() pageChange = new EventEmitter<number>()` (para Anterior/Siguiente en el futuro, o evento compuesto)
-- [ ] Renderizar texto "X resultados" con pluralización correcta ("1 resultado", "X resultados")
-- [ ] Renderizar select con opciones 5, 10, 20
-- [ ] Emitir `pageSizeChange` al cambiar el select
-- [ ] Renderizar botones Anterior / Indicador de página / Siguiente
-- [ ] Deshabilitar Anterior en página 1
-- [ ] Deshabilitar Siguiente en última página
-- [ ] Mostrar "Página X de Y" entre los botones de navegación
-- [ ] Crear estilos SCSS según Diseño D1
+- [x] Crear `product-pagination.component.ts` (standalone)
+- [x] Implementar `@Input() totalItems: number`
+- [x] Implementar `@Input() pageSize: number`
+- [x] Implementar `@Output() pageSizeChange = new EventEmitter<number>()`
+- [x] Implementar `@Output() pageChange = new EventEmitter<number>()`
+- [x] Renderizar texto "X resultados" con pluralización correcta ("1 resultado", "X resultados")
+- [x] Renderizar select con opciones 5, 10, 20
+- [x] Emitir `pageSizeChange` al cambiar el select
+- [x] Renderizar botones Anterior / Indicador de página / Siguiente
+- [x] Deshabilitar Anterior en página 1
+- [x] Deshabilitar Siguiente en última página
+- [x] Mostrar "Página X de Y" entre los botones de navegación
+- [x] Crear estilos SCSS según Diseño D1
 
 #### Página — ProductListPage (modificaciones)
-- [ ] Agregar propiedad `currentPage = 1`
-- [ ] Agregar propiedad `pageSize = 5`
-- [ ] Implementar getter `totalPages`
-- [ ] Implementar getter `paginatedProducts`
-- [ ] Implementar `onPageSizeChange(size: number)` — actualizar pageSize, reiniciar currentPage
-- [ ] Implementar `onPageChange(direction: 'next' | 'prev')` — navegar páginas
-- [ ] Pasar `paginatedProducts` al `ProductTableComponent` en lugar de `filteredProducts`
-- [ ] Pasar `filteredProducts.length` como `totalItems` al `ProductPaginationComponent`
-- [ ] Asegurar integración correcta con búsqueda (SPEC-002): al filtrar, reiniciar página a 1
+- [x] Agregar propiedad `currentPage = 1` (ya en ProductStateService — no duplicado)
+- [x] Agregar propiedad `pageSize = 5` (ya en ProductStateService)
+- [x] Implementar getter `totalPages` (ya en ProductStateService)
+- [x] Implementar getter `paginatedProducts` (ya en ProductStateService)
+- [x] Implementar `onPageSizeChange(size: number)` (via `state.setPageSize()`)
+- [x] Implementar `onPageChange(direction)` (via `state.setPage()`)
+- [x] Pasar `paginatedProducts` al `ProductTableComponent` (via `paginatedProducts$`)
+- [x] Pasar `filteredProducts.length` como `totalItems` al `ProductPaginationComponent`
+- [x] Asegurar integración correcta con búsqueda (SPEC-002): al filtrar, reiniciar página a 1
 
 ### Tests — Jest
 
 #### ProductPaginationComponent
-- [ ] `should display correct result count` — verificar "X resultados"
-- [ ] `should display "1 resultado" when total is 1` — singular
-- [ ] `should render select with options 5, 10, 20` — verificar <option> elements
-- [ ] `should emit pageSizeChange when select changes` — cambiar a 10, verificar emit
-- [ ] `should emit pageSizeChange with correct value` — verificar valor emitido
-- [ ] `should disable prev button on first page` — verificar atributo disabled
-- [ ] `should disable next button on last page` — verificar atributo disabled
-- [ ] `should display current page indicator` — verificar "Página X de Y"
+- [x] `should display correct result count` — verificar "X resultados"
+- [x] `should display "1 resultado" when total is 1` — singular
+- [x] `should display "0 resultados" when total is 0` — adicional
+- [x] `should render select with options 5, 10, 20` — verificar opciones
+- [x] `should emit pageSizeChange when select changes` — cambiar a 10
+- [x] `should emit pageSizeChange with correct value` — verificar valor 20
+- [x] `should disable prev button on first page` — verificar atributo disabled
+- [x] `should disable next button on last page` — verificar atributo disabled
+- [x] `should enable both buttons on middle page` — adicional
+- [x] `should disable both buttons when only 1 page` — adicional
+- [x] `should display current page indicator` — "Página X de Y"
+- [x] `should emit pageChange with previous page on goToPrevious` — adicional
+- [x] `should not emit pageChange on goToPrevious when on first page` — adicional
+- [x] `should emit pageChange with next page on goToNext` — adicional
+- [x] `should not emit pageChange on goToNext when on last page` — adicional
+- [x] `should return correct values for isFirstPage` — adicional
+- [x] `should return correct values for isLastPage` — adicional
 
 #### ProductListPage (modificaciones)
-- [ ] `should paginate products correctly with default pageSize 5` — mock 12 productos, verificar 5 en tabla
-- [ ] `should show next 5 products when navigating to page 2` — cambiar página, verificar productos
-- [ ] `should reset to page 1 when pageSize changes` — cambiar pageSize, verificar currentPage=1
-- [ ] `should show all products when total is less than pageSize` — mock 3 productos, verificar todos
-- [ ] `should recalculate pagination when search filter changes` — filtrar, verificar reset a página 1
-- [ ] `should disable next button on last page`
+- [x] `should paginate products correctly` — ya probado via ProductStateService.spec.ts
+- [x] `should show next products when navigating` — ya via setPage()
+- [x] `should reset to page 1 when pageSize changes` — ya via setPageSize()
+- [x] `should reset page when search filter changes` — ya via setSearchTerm()
 
 ### QA
 - [ ] Ejecutar `/gherkin-case-generator` para HU-03

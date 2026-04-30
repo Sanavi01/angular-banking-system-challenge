@@ -69,7 +69,7 @@ Total: X | Alto (A): X | Medio (S): X | Bajo (D): X
 
 ## Proceso
 
-1. Leer spec completa en `.github/specs/<feature>.spec.md`
+1. Leer spec completa en `.opencode/specs/<feature>.spec.md`
 2. Por cada HU y endpoint → evaluar factores de riesgo
 3. Asignar nivel ASD con justificación
 4. Generar matriz de riesgos

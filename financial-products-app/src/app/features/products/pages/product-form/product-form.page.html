@@ -1,0 +1,22 @@
+<div class="page">
+  <div class="form-page-wrapper">
+    <!-- Error message -->
+    <div *ngIf="error$ | async as errorMsg" class="error-banner">
+      {{ errorMsg }}
+    </div>
+
+    <!-- Product Form -->
+    <app-product-form
+      [product]="product$ | async"
+      [isEditMode]="isEditMode"
+      [submitting]="(submitting$ | async) ?? false"
+      (formSubmit)="onFormSubmit($event)"
+      (formReset)="onFormReset()"
+    ></app-product-form>
+
+    <!-- Back link -->
+    <a routerLink="/products" class="back-link">
+      ← Volver al listado
+    </a>
+  </div>
+</div>

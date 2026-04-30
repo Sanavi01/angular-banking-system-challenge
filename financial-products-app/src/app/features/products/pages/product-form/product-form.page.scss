@@ -1,0 +1,40 @@
+// ProductFormPage — Diseño D2
+// Página centrada con formulario de registro
+
+$color-bg: #f0f2f5;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.form-page-wrapper {
+  width: 100%;
+  max-width: 800px;
+}
+
+.error-banner {
+  padding: 12px 16px;
+  background: #fdecea;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  color: #d32f2f;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #1a237e;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

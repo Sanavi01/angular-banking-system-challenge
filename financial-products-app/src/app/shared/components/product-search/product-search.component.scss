@@ -1,0 +1,40 @@
+// ProductSearchComponent — Diseño D1
+// Campo de búsqueda con estilo claro
+
+$color-border: #e0e0e0;
+$color-text: #333333;
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid $color-border;
+  border-radius: 6px;
+  padding: 8px 14px;
+  min-width: 220px;
+  transition: border-color 0.2s ease;
+
+  &:focus-within {
+    border-color: #aaaaaa;
+  }
+}
+
+.search-icon {
+  font-size: 14px;
+  color: #999999;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: $color-text;
+  font-size: 13px;
+  width: 100%;
+
+  &::placeholder {
+    color: #999999;
+  }
+}

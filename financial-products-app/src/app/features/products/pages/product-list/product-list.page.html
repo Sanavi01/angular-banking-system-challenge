@@ -1,0 +1,33 @@
+<div class="page">
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content-wrapper">
+      <!-- Top bar: Search + Add button -->
+      <div class="top-bar">
+        <app-product-search
+          placeholder="Search..."
+          (searchChange)="state.setSearchTerm($event)"
+        ></app-product-search>
+        <button class="btn-add" routerLink="/products/add">Agregar</button>
+      </div>
+
+      <!-- Table -->
+      <app-product-table
+        [products]="(state.paginatedProducts$ | async) ?? []"
+        [loading]="(loading$ | async) ?? false"
+        [error]="error$ | async"
+        (edit)="onEditProduct($event)"
+      ></app-product-table>
+
+      <!-- Footer with pagination -->
+      <app-product-pagination
+        [totalItems]="(state.totalFiltered$ | async) ?? 0"
+        [currentPage]="(state.currentPage$ | async) ?? 1"
+        [pageSize]="(state.pageSize$ | async) ?? 5"
+        [totalPages]="(state.totalPages$ | async) ?? 1"
+        (pageSizeChange)="state.setPageSize($event)"
+        (pageChange)="state.setPage($event)"
+      ></app-product-pagination>
+    </div>
+  </main>
+</div>

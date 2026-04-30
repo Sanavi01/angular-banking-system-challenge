@@ -7,7 +7,7 @@ argument-hint: "<nombre-feature>"
 # Gherkin Case Generator
 
 ## Proceso
-1. Lee spec: `.github/specs/<feature>.spec.md` — criterios de aceptación y reglas de negocio
+1. Lee spec: `.opencode/specs/<feature>.spec.md` — criterios de aceptación y reglas de negocio
 2. Identifica flujos críticos (happy paths + error paths + edge cases)
 3. Genera escenario Gherkin por cada criterio
 4. Define datos de prueba sintéticos por escenario
