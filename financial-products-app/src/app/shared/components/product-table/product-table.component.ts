@@ -4,11 +4,16 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../../core/models/product.model';
 import { DateDisplayPipe } from '../../pipes/date-display.pipe';
 import { ProductMenuComponent } from '../../../features/products/components/product-menu/product-menu.component';
+
+interface ProductView extends Product {
+  _imageFailed?: boolean;
+}
 
 @Component({
   selector: 'app-product-table',
@@ -26,13 +31,19 @@ export class ProductTableComponent {
   @Output() edit = new EventEmitter<string>();
   @Output() delete = new EventEmitter<string>();
 
+  private failedImages = new Set<string>();
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
   onImageError(event: Event, product: Product): void {
+    this.failedImages.add(product.id);
     const img = event.target as HTMLImageElement;
     img.style.display = 'none';
-    const placeholder = img.nextElementSibling as HTMLElement;
-    if (placeholder) {
-      placeholder.style.display = 'flex';
-    }
+    this.cdr.markForCheck();
+  }
+
+  hasImageError(id: string): boolean {
+    return this.failedImages.has(id);
   }
 
   getInitial(name: string): string {

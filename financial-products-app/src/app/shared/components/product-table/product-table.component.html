@@ -43,12 +43,16 @@
         <td class="col-logo">
           <div class="logo-wrapper">
             <img
+              *ngIf="product.logo && !hasImageError(product.id)"
               [src]="product.logo"
               [alt]="product.name"
               class="logo-image"
               (error)="onImageError($event, product)"
             />
-            <div class="logo-placeholder" [style.display]="'none'">
+            <div
+              class="logo-placeholder"
+              [style.display]="(product.logo && !hasImageError(product.id)) ? 'none' : 'flex'"
+            >
               {{ getInitial(product.name) }}
             </div>
           </div>

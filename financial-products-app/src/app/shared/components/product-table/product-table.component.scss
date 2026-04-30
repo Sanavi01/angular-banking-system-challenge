@@ -1,7 +1,6 @@
 // ProductTableComponent — Diseño D1
-// Tabla de productos financieros con estilos corporativos
+// Tabla de productos financieros con estilos limpios
 
-$color-primary: #1a237e;
 $color-text: #333333;
 $color-text-light: #666666;
 $color-border: #e0e0e0;
@@ -48,7 +47,7 @@ $color-info-icon: #9e9e9e;
   width: 32px;
   height: 32px;
   border: 3px solid $color-border;
-  border-top-color: $color-primary;
+  border-top-color: #666666;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -68,11 +67,11 @@ $color-info-icon: #9e9e9e;
     background: $color-bg-alt;
 
     th {
-      padding: 12px 16px;
+      padding: 14px 16px;
       text-align: left;
       font-weight: 600;
       color: $color-text;
-      border-bottom: 2px solid $color-border;
+      border-bottom: 1px solid $color-border;
       white-space: nowrap;
     }
   }
@@ -83,20 +82,12 @@ $color-info-icon: #9e9e9e;
       transition: background-color 0.15s ease;
 
       &:hover {
-        background: #eef1f6;
-      }
-    }
-
-    .alt-row {
-      background: $color-bg-alt;
-
-      &:hover {
-        background: #eef1f6;
+        background: #fafafa;
       }
     }
 
     td {
-      padding: 12px 16px;
+      padding: 14px 16px;
       color: $color-text;
       vertical-align: middle;
     }
@@ -116,7 +107,7 @@ $color-info-icon: #9e9e9e;
   }
 
   .col-date {
-    width: 130px;
+    width: 140px;
     white-space: nowrap;
   }
 
@@ -149,7 +140,6 @@ $color-info-icon: #9e9e9e;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid $color-border;
   object-fit: cover;
 }
 
@@ -157,12 +147,11 @@ $color-info-icon: #9e9e9e;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: $color-primary;
+  background: #c4c8d0;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid darken($color-primary, 10%);
 }
