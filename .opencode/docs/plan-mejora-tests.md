@@ -47,7 +47,7 @@
 
 ---
 
-## ⬜ Punto 3 — Reducir `fixture.detectChanges()`
+## ✅ Punto 3 — Reducir `fixture.detectChanges()`
 
 **Problema:** Se llama en tests de lógica donde no es necesario.
 
@@ -55,7 +55,11 @@
 - Tests de `FormGroup` → sin `detectChanges()`
 - Tests de DOM/renderizado → con `detectChanges()`
 
-**Estado:** ⬜ Pendiente (depende del Punto 1)
+**Cambios realizados:**
+- `product-form.component.spec.ts`: eliminados 3 `detectChanges()` innecesarios en tests de `date_revision` (la suscripción RxJS `valueChanges` es sincrónica)
+- Los demás specs ya tenían uso correcto: `detectChanges()` solo en tests DOM
+
+**Estado:** ✅ Completado
 
 ---
 

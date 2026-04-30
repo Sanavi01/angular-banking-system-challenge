@@ -140,15 +140,12 @@ describe('ProductFormComponent', () => {
 
     it('should auto-calculate date_revision = date_release + 1 year', () => {
       component.form.get('date_release')?.setValue('2026-06-15');
-      fixture.detectChanges(); // needed because valueChanges subscription
       expect(component.form.get('date_revision')?.value).toBe('2027-06-15');
     });
 
     it('should clear date_revision when date_release is emptied', () => {
       component.form.get('date_release')?.setValue('2026-06-15');
-      fixture.detectChanges();
       component.form.get('date_release')?.setValue('');
-      fixture.detectChanges();
       expect(component.form.get('date_revision')?.value).toBe('');
     });
 
