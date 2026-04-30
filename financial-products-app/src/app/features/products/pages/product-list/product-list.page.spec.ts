@@ -126,22 +126,22 @@ describe('ProductListPage', () => {
   // --- Page Layout ---
 
   describe('Page Layout', () => {
-    it('should render header with brand name', () => {
-      const brandText = fixture.debugElement.query(By.css('.brand-text'));
-      expect(brandText).toBeTruthy();
-      expect(brandText.nativeElement.textContent).toContain('BANCO');
-    });
-
-    it('should render brand icon', () => {
-      const brandIcon = fixture.debugElement.query(By.css('.brand-icon'));
-      expect(brandIcon).toBeTruthy();
-    });
-
     it('should render search component', () => {
       const searchComponent = fixture.debugElement.query(
         By.css('app-product-search'),
       );
       expect(searchComponent).toBeTruthy();
+    });
+
+    it('should render add button', () => {
+      const addButton = fixture.debugElement.query(By.css('.btn-add'));
+      expect(addButton).toBeTruthy();
+      expect(addButton.nativeElement.textContent).toContain('Agregar');
+    });
+
+    it('should render top bar with search and add button', () => {
+      const topBar = fixture.debugElement.query(By.css('.top-bar'));
+      expect(topBar).toBeTruthy();
     });
 
     it('should render footer with results text', () => {

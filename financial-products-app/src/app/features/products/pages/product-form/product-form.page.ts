@@ -1,10 +1,11 @@
 import {
   Component,
+  OnInit,
   ChangeDetectionStrategy,
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProductService } from '../../../../core/services/product.service';
@@ -20,40 +21,57 @@ import { ProductFormComponent } from '../../components/product-form/product-form
   styleUrls: ['./product-form.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductFormPage implements OnDestroy {
+export class ProductFormPage implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   readonly submitting$ = new BehaviorSubject<boolean>(false);
   readonly error$ = new BehaviorSubject<string | null>(null);
-  readonly success$ = new BehaviorSubject<string | null>(null);
+  readonly product$ = new BehaviorSubject<Product | null>(null);
+
+  isEditMode = false;
+  private productId: string | null = null;
 
   constructor(
     private productService: ProductService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
-  onFormSubmit(product: Product): void {
+  ngOnInit(): void {
+    this.productId = this.route.snapshot.paramMap.get('id');
+    if (this.productId) {
+      this.isEditMode = true;
+      this.productService
+        .getById(this.productId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (product) => this.product$.next(product),
+          error: (err: ApiError) => this.error$.next(err.message),
+        });
+    }
+  }
+
+  onFormSubmit(data: Product): void {
     this.submitting$.next(true);
     this.error$.next(null);
 
-    this.productService
-      .create(product)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.success$.next('Producto creado exitosamente');
-          this.router.navigate(['/products']);
-        },
-        error: (err: ApiError) => {
-          this.error$.next(err.message);
-          this.submitting$.next(false);
-        },
-      });
+    const request$ = this.isEditMode
+      ? this.productService.update(this.productId!, data)
+      : this.productService.create(data);
+
+    request$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.router.navigate(['/products']);
+      },
+      error: (err: ApiError) => {
+        this.error$.next(err.message);
+        this.submitting$.next(false);
+      },
+    });
   }
 
   onFormReset(): void {
     this.error$.next(null);
-    this.success$.next(null);
   }
 
   ngOnDestroy(): void {

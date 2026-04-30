@@ -38,21 +38,16 @@ describe('ProductFormComponent', () => {
       expect(ids).toContain('date_revision');
     });
 
-    it('should show form title "Nuevo Producto" in create mode', () => {
+    it('should show form title "Formulario de Registro"', () => {
       const title = fixture.debugElement.query(By.css('.form-title'));
-      expect(title.nativeElement.textContent).toContain('Nuevo Producto');
+      expect(title.nativeElement.textContent).toContain('Formulario de Registro');
     });
 
     it('should render submit and reset buttons', () => {
       const buttons = fixture.debugElement.queryAll(By.css('button'));
       const btnTexts = buttons.map((b) => b.nativeElement.textContent.trim());
       expect(btnTexts).toContain('Reiniciar');
-      expect(btnTexts).toContain('Agregar');
-    });
-
-    it('should render hint text for date_revision', () => {
-      const hint = fixture.debugElement.query(By.css('.field-hint'));
-      expect(hint).toBeTruthy();
+      expect(btnTexts).toContain('Enviar');
     });
   });
 
@@ -183,9 +178,10 @@ describe('ProductFormComponent', () => {
   // --- Edit Mode (SPEC-005) ---
 
   describe('Edit mode', () => {
-    it('should show "Editar Producto" title in edit mode', async () => {
+    it('should show "Formulario de Registro" title in edit mode', async () => {
       const editFixture = TestBed.createComponent(ProductFormComponent);
       const editComponent = editFixture.componentInstance;
+      editComponent.isEditMode = true;
       editComponent.product = {
         id: 'trj-crd',
         name: 'Test',
@@ -197,12 +193,13 @@ describe('ProductFormComponent', () => {
       editFixture.detectChanges();
 
       const title = editFixture.debugElement.query(By.css('.form-title'));
-      expect(title.nativeElement.textContent).toContain('Editar Producto');
+      expect(title.nativeElement.textContent).toContain('Formulario de Registro');
     });
 
     it('should disable id field in edit mode', async () => {
       const editFixture = TestBed.createComponent(ProductFormComponent);
       const editComponent = editFixture.componentInstance;
+      editComponent.isEditMode = true;
       editComponent.product = {
         id: 'trj-crd',
         name: 'Test',

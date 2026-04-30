@@ -5,6 +5,8 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,10 +32,11 @@ import { DateUtil } from '../../../../shared/utils/date.util';
   styleUrls: ['./product-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductFormComponent implements OnInit, OnDestroy {
+export class ProductFormComponent implements OnInit, OnDestroy, OnChanges {
   private destroy$ = new Subject<void>();
 
   @Input() product: Product | null = null;
+  @Input() isEditMode = false;
   @Input() submitting = false;
   @Output() formSubmit = new EventEmitter<Product>();
   @Output() formReset = new EventEmitter<void>();
@@ -43,12 +46,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private idExistsValidator: IdExistsValidator,
+    readonly idExistsValidator: IdExistsValidator,
   ) {}
-
-  get isEditMode(): boolean {
-    return this.product !== null;
-  }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -88,6 +87,12 @@ export class ProductFormComponent implements OnInit, OnDestroy {
           dateRevisionControl?.setValue('');
         }
       });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['product'] && this.product && this.form) {
+      this.form.patchValue(this.product);
+    }
   }
 
   getErrorMessage(fieldName: string): string {

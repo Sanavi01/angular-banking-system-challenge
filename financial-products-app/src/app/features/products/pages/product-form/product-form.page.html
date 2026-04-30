@@ -7,6 +7,8 @@
 
     <!-- Product Form -->
     <app-product-form
+      [product]="product$ | async"
+      [isEditMode]="isEditMode"
       [submitting]="(submitting$ | async) ?? false"
       (formSubmit)="onFormSubmit($event)"
       (formReset)="onFormReset()"

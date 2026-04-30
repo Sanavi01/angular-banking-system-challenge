@@ -57,7 +57,7 @@ $color-white: #ffffff;
 }
 
 .page-size-select {
-  padding: 5px 10px;
+  padding: 6px 10px;
   border: 1px solid $color-border;
   border-radius: 4px;
   font-size: 13px;
@@ -67,6 +67,6 @@ $color-white: #ffffff;
   outline: none;
 
   &:focus {
-    border-color: $color-primary;
+    border-color: #aaaaaa;
   }
 }

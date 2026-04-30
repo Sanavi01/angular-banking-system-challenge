@@ -129,7 +129,7 @@ describe('ProductTableComponent', () => {
       const headers = fixture.debugElement.queryAll(By.css('thead th'));
       const headerTexts = headers.map((h) => h.nativeElement.textContent.trim());
 
-      expect(headers.length).toBe(5);
+      expect(headers.length).toBe(6); // Added actions column
       expect(headerTexts[0]).toContain('Logo');
       expect(headerTexts[1]).toContain('Nombre del producto');
       expect(headerTexts[2]).toContain('Descripción');
@@ -203,8 +203,9 @@ describe('ProductTableComponent', () => {
   // --- Logo Fallback ---
 
   describe('Logo Fallback', () => {
-    it('should show placeholder div alongside each logo image', () => {
-      component.products = MOCK_PRODUCTS;
+    it('should show placeholder when product has no logo', () => {
+      const productsWithoutLogo = MOCK_PRODUCTS.map((p) => ({ ...p, logo: '' }));
+      component.products = productsWithoutLogo;
       fixture.detectChanges();
 
       const placeholders = fixture.debugElement.queryAll(By.css('.logo-placeholder'));
@@ -212,7 +213,8 @@ describe('ProductTableComponent', () => {
     });
 
     it('should display product initial in placeholder', () => {
-      component.products = MOCK_PRODUCTS;
+      const productsWithoutLogo = MOCK_PRODUCTS.map((p) => ({ ...p, logo: '' }));
+      component.products = productsWithoutLogo;
       fixture.detectChanges();
 
       const placeholders = fixture.debugElement.queryAll(By.css('.logo-placeholder'));
@@ -220,12 +222,12 @@ describe('ProductTableComponent', () => {
       expect(placeholders[1].nativeElement.textContent.trim()).toBe('T');
     });
 
-    it('should hide placeholder initially', () => {
+    it('should show image when product has logo', () => {
       component.products = MOCK_PRODUCTS;
       fixture.detectChanges();
 
-      const placeholder = fixture.debugElement.query(By.css('.logo-placeholder'));
-      expect(placeholder.nativeElement.style.display).toBe('none');
+      const logoImages = fixture.debugElement.queryAll(By.css('.logo-image'));
+      expect(logoImages.length).toBe(2);
     });
 
     it('should hide image and show placeholder on image error', () => {
@@ -234,9 +236,13 @@ describe('ProductTableComponent', () => {
 
       const logoImage = fixture.debugElement.query(By.css('.logo-image'));
       logoImage.triggerEventHandler('error', { target: logoImage.nativeElement });
+      fixture.detectChanges();
 
       // After onerror, image is hidden and placeholder shown
       expect(logoImage.nativeElement.style.display).toBe('none');
+      const placeholder = fixture.debugElement.query(By.css('.logo-placeholder'));
+      expect(placeholder).toBeTruthy();
+      expect(placeholder.nativeElement.textContent.trim()).toBe('T');
     });
   });
 

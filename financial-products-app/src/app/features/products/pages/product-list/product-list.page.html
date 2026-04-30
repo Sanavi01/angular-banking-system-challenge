@@ -1,29 +1,22 @@
 <div class="page">
-  <!-- Header -->
-  <header class="header">
-    <div class="header-content">
-      <div class="brand">
-        <span class="brand-icon">🏦</span>
-        <span class="brand-text">BANCO</span>
-      </div>
-      <div class="header-actions">
+  <!-- Main Content -->
+  <main class="main">
+    <div class="content-wrapper">
+      <!-- Top bar: Search + Add button -->
+      <div class="top-bar">
         <app-product-search
           placeholder="Search..."
           (searchChange)="state.setSearchTerm($event)"
         ></app-product-search>
         <button class="btn-add" routerLink="/products/add">Agregar</button>
       </div>
-    </div>
-  </header>
 
-  <!-- Main Content -->
-  <main class="main">
-    <div class="content-wrapper">
       <!-- Table -->
       <app-product-table
         [products]="(state.paginatedProducts$ | async) ?? []"
         [loading]="(loading$ | async) ?? false"
         [error]="error$ | async"
+        (edit)="onEditProduct($event)"
       ></app-product-table>
 
       <!-- Footer with pagination -->
