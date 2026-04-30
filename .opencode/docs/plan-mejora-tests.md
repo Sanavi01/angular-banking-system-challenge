@@ -59,7 +59,7 @@
 
 ---
 
-## ⬜ Punto 4 — Verificar `disabled` en el DOM
+## ✅ Punto 4 — Verificar `disabled` en el DOM
 
 **Problema:** Solo se verifica `form.invalid`, no `btn.nativeElement.disabled`.
 
@@ -69,7 +69,7 @@
 **Archivos afectados:**
 - `product-form.component.spec.ts`
 
-**Estado:** ⬜ Pendiente
+**Estado:** ✅ Completado (ya estaba implementado)
 
 ---
 
