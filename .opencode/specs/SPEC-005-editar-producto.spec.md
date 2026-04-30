@@ -1,6 +1,6 @@
 ---
 id: SPEC-005
-status: DRAFT
+status: APPROVED
 feature: f5-editar-producto
 created: 2026-04-29
 updated: 2026-04-29
