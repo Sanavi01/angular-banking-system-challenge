@@ -139,7 +139,7 @@ npm run test:coverage # Tests + reporte de cobertura
 | Branches | **92.3%** |
 | Functions | **85.22%** |
 | Lines | **94.2%** |
-| Test suites | **15** (165 tests) |
+| Test suites | **16** (160 tests) |
 
 ---
 

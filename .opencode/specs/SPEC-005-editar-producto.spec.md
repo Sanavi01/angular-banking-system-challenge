@@ -375,12 +375,3 @@ export class ProductFormPage implements OnInit, OnDestroy {
 
 #### ProductTableComponent (modificaciones)
 - [x] `should render table with correct columns (6)` — columna acciones agregada
-
-### QA
-- [ ] Ejecutar `/gherkin-case-generator` para HU-05
-- [ ] Ejecutar `/risk-identifier` para SPEC-005
-- [ ] Probar manualmente: editar producto, verificar cambios
-- [ ] Probar: menú abre/cierra correctamente, solo uno a la vez
-- [ ] Probar: ID deshabilitado, validaciones activas
-- [ ] Validar visualmente contra Diseño D2 (edición), D3 (menú)
-- [x] Verificar build sin errores
