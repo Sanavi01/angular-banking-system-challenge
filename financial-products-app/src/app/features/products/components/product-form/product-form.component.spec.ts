@@ -186,6 +186,7 @@ describe('ProductFormComponent', () => {
     it('should show "Editar Producto" title in edit mode', async () => {
       const editFixture = TestBed.createComponent(ProductFormComponent);
       const editComponent = editFixture.componentInstance;
+      editComponent.isEditMode = true;
       editComponent.product = {
         id: 'trj-crd',
         name: 'Test',
@@ -203,6 +204,7 @@ describe('ProductFormComponent', () => {
     it('should disable id field in edit mode', async () => {
       const editFixture = TestBed.createComponent(ProductFormComponent);
       const editComponent = editFixture.componentInstance;
+      editComponent.isEditMode = true;
       editComponent.product = {
         id: 'trj-crd',
         name: 'Test',

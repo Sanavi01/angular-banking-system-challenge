@@ -129,7 +129,7 @@ describe('ProductTableComponent', () => {
       const headers = fixture.debugElement.queryAll(By.css('thead th'));
       const headerTexts = headers.map((h) => h.nativeElement.textContent.trim());
 
-      expect(headers.length).toBe(5);
+      expect(headers.length).toBe(6); // Added actions column
       expect(headerTexts[0]).toContain('Logo');
       expect(headerTexts[1]).toContain('Nombre del producto');
       expect(headerTexts[2]).toContain('Descripción');
