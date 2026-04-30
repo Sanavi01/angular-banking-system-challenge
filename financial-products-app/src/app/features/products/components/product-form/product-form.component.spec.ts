@@ -86,6 +86,8 @@ describe('ProductFormComponent', () => {
 
     it('should be invalid when empty', () => {
       expect(component.form.valid).toBe(false);
+      expect(component.form.get('id')?.errors?.['required']).toBeTruthy();
+      expect(component.form.get('name')?.errors?.['required']).toBeTruthy();
     });
 
     it('should mark all fields as touched on submit', () => {
@@ -100,7 +102,6 @@ describe('ProductFormComponent', () => {
       ctrl.markAsTouched();
       ctrl.updateValueAndValidity();
 
-      expect(ctrl.invalid).toBe(true);
       expect(ctrl.errors).toEqual({
         minlength: { requiredLength: 3, actualLength: 2 },
       });
@@ -112,7 +113,6 @@ describe('ProductFormComponent', () => {
       ctrl.markAsTouched();
       ctrl.updateValueAndValidity();
 
-      expect(ctrl.invalid).toBe(true);
       expect(ctrl.errors).toEqual({
         minlength: { requiredLength: 5, actualLength: 4 },
       });
@@ -124,7 +124,6 @@ describe('ProductFormComponent', () => {
       ctrl.markAsTouched();
       ctrl.updateValueAndValidity();
 
-      expect(ctrl.invalid).toBe(true);
       expect(ctrl.errors).toEqual({
         minlength: { requiredLength: 10, actualLength: 9 },
       });
@@ -136,7 +135,6 @@ describe('ProductFormComponent', () => {
       ctrl.markAsTouched();
       ctrl.updateValueAndValidity();
 
-      expect(ctrl.invalid).toBe(true);
       expect(ctrl.errors).toEqual({ dateNotPast: true });
     });
 
@@ -222,7 +220,8 @@ describe('ProductFormComponent', () => {
 
     it('should disable submit button when form is invalid', () => {
       const submitBtn = fixture.debugElement.query(By.css('[data-testid="btn-submit"]'));
-      expect(component.form.invalid).toBe(true);
+      expect(component.form.get('id')?.errors?.['required']).toBeTruthy();
+      expect(component.form.get('name')?.errors?.['required']).toBeTruthy();
       expect(submitBtn.nativeElement.disabled).toBe(true);
     });
 

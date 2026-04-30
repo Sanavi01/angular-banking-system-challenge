@@ -29,11 +29,11 @@
 - `product-form.page.html` → agregar `data-testid`
 - `product-form.page.spec.ts` → refactorizar selectores
 
-**Estado:** 🔄 En progreso
+**Estado:** ✅ Completado
 
 ---
 
-## ⬜ Punto 2 — Validaciones más precisas
+## ✅ Punto 2 — Validaciones más precisas
 
 **Problema:** `expect(control.invalid).toBe(true)` no dice por qué falla.
 
@@ -43,7 +43,7 @@
 **Archivos afectados:**
 - `product-form.component.spec.ts`
 
-**Estado:** ⬜ Pendiente
+**Estado:** ✅ Completado
 
 ---
 
