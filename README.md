@@ -1,185 +1,153 @@
-# ASDD — Agent Spec-Driven Development
+# Financial Products App — Sistema Bancario
 
-Framework de desarrollo asistido por IA que transforma requerimientos en código funcional mediante agentes especializados orquestados. Garantiza calidad y trazabilidad a través de especificaciones técnicas aprobadas antes de cualquier implementación.
-
-```
-Requerimiento → Spec → [Backend ∥ Frontend ∥ DB] → [Tests BE ∥ Tests FE] → QA → Docs
-```
+Aplicación web para la gestión de productos financieros. CRUD completo con listado, búsqueda, paginación, formulario de registro/edición y validaciones en tiempo real. Construida bajo los principios **ASDD** (Agent Spec-Driven Development).
 
 ---
 
-## Compatibilidad
+## Stack
 
-| Herramienta | Configuración | Carpeta de agentes |
-|-------------|---------------|--------------------|
-| **Claude Code CLI** | `.claude/settings.json` | `.claude/agents/` |
-| **GitHub Copilot** | `.github/copilot-instructions.md` | `.github/agents/` |
-
-Ambas herramientas comparten el mismo flujo, las mismas specs y los mismos lineamientos. Solo difiere la carpeta de entrada de los agentes.
+| Capa | Tecnología |
+|------|-----------|
+| Framework | Angular 17 (standalone components) |
+| Lenguaje | TypeScript 5.4 |
+| Estilos | **SCSS puro** — sin frameworks CSS |
+| HTTP | `@angular/common/http` con `ErrorInterceptor` global |
+| Estado | RxJS 7.8 — `ProductStateService` como facade reactivo |
+| Router | Angular Router con lazy loading |
+| Testing | Jest 29 (`jest-preset-angular` v14) |
+| Backend | Express + TypeScript (API REST local en `localhost:3002`) |
+| Metodología | ASDD — specs aprobadas antes de implementar |
 
 ---
 
-## Instalación
+## Cómo levantar el proyecto
 
-### Claude Code CLI
-
-1. Instala Claude Code: https://claude.ai/code
-2. Autentícate con tu cuenta Anthropic
-3. Clona este repositorio en tu proyecto
-4. Copia `.claude/` a la raíz de tu proyecto
+### 1. Backend (API REST local)
 
 ```bash
-cp -r .claude/ /tu-proyecto/.claude/
-cp -r .github/ /tu-proyecto/.github/
+# Descomprimir y entrar al backend
+unzip repo-interview-main.zip -d backend
+cd backend
+npm install
+npm run start:dev
 ```
 
-### GitHub Copilot
+El servidor queda en `http://localhost:3002`.
 
-1. Instala la extensión **GitHub Copilot Chat** en VS Code
-2. Activa el uso de instruction files en tu settings.json de VS Code:
+**Endpoints disponibles:**
 
-```json
-{
-  "github.copilot.chat.codeGeneration.useInstructionFiles": true
-}
-```
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/bp/products` | Listar productos |
+| `POST` | `/bp/products` | Crear producto |
+| `PUT` | `/bp/products/:id` | Actualizar producto |
+| `DELETE` | `/bp/products/:id` | Eliminar producto |
+| `GET` | `/bp/products/verification/:id` | Verificar si un ID existe |
 
-3. Copia `.github/` a la raíz de tu proyecto
-
----
-
-## Flujo de trabajo
-
-### Opción A — Orquestación automática completa
-
-```
-/asdd-orchestrate nombre-feature
-```
-
-El Orchestrator gestiona todo: genera la spec, espera aprobación, ejecuta fases en paralelo y reporta el estado al final.
-
-### Opción B — Control manual paso a paso
+### 2. Frontend (Angular)
 
 ```bash
-# 1. Generar especificación técnica
-/generate-spec nombre-feature
-
-# 2. Revisar y aprobar la spec generada en .github/specs/<feature>.spec.md
-#    Cambiar el campo:  status: DRAFT  →  status: APPROVED
-
-# 3. Implementar backend y frontend (se pueden ejecutar en paralelo)
-/implement-backend nombre-feature
-/implement-frontend nombre-feature
-
-# 4. Generar tests
-/unit-testing nombre-feature
-
-# 5. Análisis QA
-/gherkin-case-generator
-/risk-identifier
+cd financial-products-app
+npm install
+npm start          # Desarrollo en http://localhost:4200
 ```
 
-> **Regla de Oro**: Ningún agente escribe código si la spec no tiene `status: APPROVED`.
+**Comandos disponibles:**
+
+| Comando | Descripción |
+|---------|-------------|
+| `npm start` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm test` | Ejecutar tests unitarios |
+| `npm run test:coverage` | Tests + reporte de cobertura |
 
 ---
 
-## Skills disponibles
-
-| Comando | Qué hace |
-|---------|----------|
-| `/asdd-orchestrate` | Orquesta el flujo ASDD completo |
-| `/generate-spec` | Genera spec técnica en `.github/specs/` |
-| `/implement-backend` | Implementa el backend según la spec aprobada |
-| `/implement-frontend` | Implementa el frontend según la spec aprobada |
-| `/unit-testing` | Genera tests unitarios e integración |
-| `/gherkin-case-generator` | Genera escenarios Given-When-Then y datos de prueba |
-| `/risk-identifier` | Clasifica riesgos de calidad (Alto / Medio / Bajo) |
-| `/automation-flow-proposer` | Propone flujos a automatizar con análisis de ROI |
-| `/performance-analyzer` | Define estrategia de performance testing con k6 |
-
----
-
-## Agentes disponibles
-
-| Agente | Fase | Responsabilidad |
-|--------|------|-----------------|
-| `orchestrator` | Entry point | Coordina el flujo completo |
-| `spec-generator` | 1 | Genera especificaciones técnicas |
-| `backend-developer` | 2 | Rutas, servicios, repositorios |
-| `frontend-developer` | 2 | Páginas, componentes, hooks |
-| `database-agent` | 2 | Modelos, migrations, seeders |
-| `test-engineer-backend` | 3 | Tests unitarios e integración backend |
-| `test-engineer-frontend` | 3 | Tests unitarios y e2e frontend |
-| `qa-agent` | 4 | Estrategia QA, Gherkin, riesgos, performance |
-| `documentation-agent` | 5 | README, API docs, ADRs |
-
-**Claude Code**: invoca agentes con `@nombre-agente` o con skills `/comando`
-**GitHub Copilot**: usa `@nombre-agente` en el chat o los prompts en `.github/prompts/`
-
----
-
-## Ciclo de vida de una spec
+## Estructura del proyecto
 
 ```
-DRAFT → APPROVED → IN_PROGRESS → IMPLEMENTED → DEPRECATED
+financial-products-app/src/app/
+├── core/                              ← Singleton, app-wide
+│   ├── interceptors/
+│   │   └── error.interceptor.ts       ← Transforma errores HTTP en ApiError
+│   ├── models/
+│   │   ├── product.model.ts           ← Interfaz Product
+│   │   └── api-error.model.ts         ← Tipo ApiError
+│   └── services/
+│       └── product.service.ts         ← Llamadas HTTP al backend
+├── features/products/
+│   ├── components/
+│   │   ├── product-form/              ← Dumb: formulario reactivo
+│   │   └── product-menu/              ← Dumb: menú contextual (⋮)
+│   ├── pages/
+│   │   ├── product-list/              ← Smart: listado + búsqueda + paginación
+│   │   └── product-form/              ← Smart: orquesta create/update
+│   └── services/
+│       └── product-state.service.ts   ← Facade RxJS del estado del listado
+├── shared/
+│   ├── components/
+│   │   ├── product-table/             ← Dumb: tabla de productos
+│   │   ├── product-search/            ← Dumb: input de búsqueda
+│   │   └── product-pagination/        ← Dumb: resultados + navegación + selector
+│   ├── pipes/
+│   │   └── date-display.pipe.ts       ← YYYY-MM-DD → DD/MM/YYYY
+│   ├── utils/
+│   │   └── date.util.ts               ← addOneYear(), toDisplay()
+│   └── validators/
+│       ├── product-validators.ts      ← Constantes de validación DRY
+│       ├── date-not-past.validator.ts ← Validación fecha ≥ hoy
+│       └── id-exists.validator.ts     ← Validación asíncrona ID único
+└── app.routes.ts                      ← Rutas con lazy loading
 ```
 
-Las specs viven en `.github/specs/<feature>.spec.md`. Solo pasan a implementación cuando el usuario las aprueba manualmente cambiando el campo `status`.
-
----
-
-## Estructura del repositorio
+### Arquitectura: Smart / Dumb
 
 ```
-.
-├── .claude/                        ← Configuración Claude Code CLI
-│   ├── settings.json               ← Modelo, permisos, hooks
-│   ├── agents/                     ← Sub-agentes Claude Code
-│   ├── skills/                     ← Skills invocables con /comando
-│   ├── rules/                      ← Reglas automáticas por tipo de archivo
-│   ├── hooks/                      ← Scripts pre/post edit
-│   └── docs/lineamientos/          ← Dev guidelines y QA guidelines
-│
-├── .github/                        ← Configuración GitHub Copilot
-│   ├── copilot-instructions.md     ← Instrucciones globales + diccionario de dominio
-│   ├── AGENTS.md                   ← Reglas de Oro para todos los agentes
-│   ├── agents/                     ← Agentes Copilot
-│   ├── skills/                     ← Skills portables
-│   ├── instructions/               ← Instrucciones por scope (backend, frontend, tests)
-│   ├── prompts/                    ← Prompts rápidos reutilizables
-│   ├── requirements/               ← Requerimientos de entrada (input)
-│   └── specs/                      ← Especificaciones técnicas (output de fase 1)
+Smart Page                     Dumb Component
+┌──────────────────┐           ┌──────────────────┐
+│ Inyecta servicios │──@Input──→│ Solo recibe props │
+│ Orquesta estado   │←@Output──│ Solo emite eventos│
+│ NO lógica render  │           │ NO llama APIs     │
+└──────────────────┘           └──────────────────┘
 ```
 
 ---
 
-## Ejemplo completo
+## Funcionalidades implementadas
+
+| Feature | Descripción |
+|---------|-------------|
+| **F1 — Listado** | Tabla con Logo, Nombre, Descripción, Fechas. Estados: loading, error, empty |
+| **F2 — Búsqueda** | Campo de texto con debounce de 300ms. Filtro por nombre y descripción |
+| **F3 — Paginación** | Contador de resultados. Selector de 5, 10 o 20 registros. Navegación entre páginas |
+| **F4 — Agregar** | Formulario reactivo con validaciones completas. `date_revision` = `date_release` + 1 año |
+| **F5 — Editar** | Menú contextual (⋮) por producto. ID deshabilitado en edición. Mismas validaciones |
+| **Validaciones** | ID único (API), 3-10 chars. Nombre 5-100. Descripción 10-200. Fecha ≥ hoy |
+
+---
+
+## Tests y Coverage
 
 ```bash
-# 1. Escribe el requerimiento
-echo "El usuario debe poder convertir monedas en tiempo real" \
-  > .github/requirements/conversiones.md
-
-# 2. Genera la spec
-/generate-spec conversiones
-
-# 3. Abre .github/specs/conversiones.spec.md, revisa y cambia:
-#    status: DRAFT  →  status: APPROVED
-
-# 4. Orquesta la implementación
-/asdd-orchestrate conversiones
-
-# → Backend implementado
-# → Frontend implementado
-# → Tests generados
-# → Análisis QA completado
+npm test              # Ejecutar tests
+npm run test:coverage # Tests + reporte de cobertura
 ```
+
+| Métrica | Cobertura |
+|---------|:---------:|
+| Statements | **92.73%** |
+| Branches | **92.3%** |
+| Functions | **85.22%** |
+| Lines | **94.2%** |
+| Test suites | **15** (165 tests) |
 
 ---
 
-## Documentación interna
+## Principios aplicados
 
-- `.github/README.md` — Guía detallada para GitHub Copilot
-- `.claude/README.md` — Guía detallada para Claude Code CLI
-- `.github/AGENTS.md` — Reglas de Oro y lineamientos de todos los agentes
-- `.github/specs/README.md` — Convenciones y ciclo de vida de specs
+- **SOLID** — Single Responsibility, Open/Closed, Dependency Inversion
+- **DRY** — Validaciones, fechas y mensajes de error centralizados
+- **Smart/Dumb** — Páginas orquestan, componentes renderizan
+- **OnPush** — Change detection en todos los componentes
+- **Unsubscribe** — `takeUntil(destroy$)` en toda suscripción
+- **0 frameworks CSS** — Solo SCSS puro
