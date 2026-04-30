@@ -1,7 +1,7 @@
 <div class="page">
   <div class="form-page-wrapper">
     <!-- Error message -->
-    <div *ngIf="error$ | async as errorMsg" class="error-banner">
+    <div *ngIf="error$ | async as errorMsg" class="error-banner" data-testid="error-banner">
       {{ errorMsg }}
     </div>
 
@@ -15,7 +15,7 @@
     ></app-product-form>
 
     <!-- Back link -->
-    <a routerLink="/products" class="back-link">
+    <a routerLink="/products" class="back-link" data-testid="back-link">
       ← Volver al listado
     </a>
   </div>

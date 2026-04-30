@@ -1,9 +1,10 @@
 <div class="pagination-footer">
-  <span class="results-text">{{ resultsText }}</span>
+  <span class="results-text" data-testid="results-text">{{ resultsText }}</span>
 
   <div class="pagination-controls">
     <button
       class="nav-btn"
+      data-testid="btn-prev"
       [disabled]="isFirstPage"
       (click)="goToPrevious()"
       title="Página anterior"
@@ -11,12 +12,13 @@
       ‹ Anterior
     </button>
 
-    <span class="page-indicator">
+    <span class="page-indicator" data-testid="page-indicator">
       Página {{ currentPage }} de {{ totalPages }}
     </span>
 
     <button
       class="nav-btn"
+      data-testid="btn-next"
       [disabled]="isLastPage"
       (click)="goToNext()"
       title="Página siguiente"
@@ -26,6 +28,7 @@
 
     <select
       class="page-size-select"
+      data-testid="page-size-select"
       [ngModel]="pageSize"
       (ngModelChange)="onPageSizeSelect($event)"
     >

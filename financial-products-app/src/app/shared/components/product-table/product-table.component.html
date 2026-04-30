@@ -1,24 +1,24 @@
 <div class="table-container">
   <!-- Loading state -->
-  <div *ngIf="loading" class="state-message">
+  <div *ngIf="loading" class="state-message" data-testid="state-loading">
     <div class="spinner"></div>
     <p>Cargando productos...</p>
   </div>
 
   <!-- Error state -->
-  <div *ngIf="!loading && error" class="state-message state-error">
+  <div *ngIf="!loading && error" class="state-message state-error" data-testid="state-error">
     <span class="error-icon">⚠️</span>
     <p>{{ error }}</p>
   </div>
 
   <!-- Empty state -->
-  <div *ngIf="!loading && !error && products.length === 0" class="state-message state-empty">
+  <div *ngIf="!loading && !error && products.length === 0" class="state-message state-empty" data-testid="state-empty">
     <span class="empty-icon">📋</span>
     <p>No se encontraron productos financieros.</p>
   </div>
 
   <!-- Data table -->
-  <table *ngIf="!loading && !error && products.length > 0" class="product-table">
+  <table *ngIf="!loading && !error && products.length > 0" class="product-table" data-testid="product-table">
     <thead>
       <tr>
         <th class="col-logo">Logo</th>
@@ -39,7 +39,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products; let i = index" [class.alt-row]="i % 2 !== 0">
+      <tr *ngFor="let product of products; let i = index" [class.alt-row]="i % 2 !== 0" data-testid="table-row">
         <td class="col-logo">
           <div class="logo-wrapper">
             <img
@@ -47,20 +47,22 @@
               [src]="product.logo"
               [alt]="product.name"
               class="logo-image"
+              data-testid="logo-image"
               (error)="onImageError($event, product)"
             />
             <div
               class="logo-placeholder"
+              data-testid="logo-placeholder"
               [style.display]="(product.logo && !hasImageError(product.id)) ? 'none' : 'flex'"
             >
               {{ getInitial(product.name) }}
             </div>
           </div>
         </td>
-        <td class="col-name">{{ product.name }}</td>
-        <td class="col-desc">{{ product.description }}</td>
-        <td class="col-date">{{ product.date_release | dateDisplay }}</td>
-        <td class="col-date">{{ product.date_revision | dateDisplay }}</td>
+        <td class="col-name" data-testid="cell-name">{{ product.name }}</td>
+        <td class="col-desc" data-testid="cell-description">{{ product.description }}</td>
+        <td class="col-date" data-testid="cell-date_release">{{ product.date_release | dateDisplay }}</td>
+        <td class="col-date" data-testid="cell-date_revision">{{ product.date_revision | dateDisplay }}</td>
         <td class="col-actions">
           <app-product-menu
             [productId]="product.id"

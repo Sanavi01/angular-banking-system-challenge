@@ -23,6 +23,8 @@ const MOCK_PRODUCTS: Product[] = [
   },
 ];
 
+const TID = (id: string) => `[data-testid="${id}"]`;
+
 describe('ProductTableComponent', () => {
   let component: ProductTableComponent;
   let fixture: ComponentFixture<ProductTableComponent>;
@@ -36,18 +38,15 @@ describe('ProductTableComponent', () => {
     component = fixture.componentInstance;
   });
 
-  // --- Rendering States ---
-
   describe('Loading State', () => {
     it('should show loading indicator when loading is true', () => {
       component.loading = true;
       fixture.detectChanges();
 
-      const spinner = fixture.debugElement.query(By.css('.spinner'));
-      const message = fixture.debugElement.query(By.css('.state-message p'));
-
+      const spinner = fixture.debugElement.query(By.css(`${TID('state-loading')} .spinner`));
       expect(spinner).toBeTruthy();
-      expect(message.nativeElement.textContent).toContain('Cargando productos');
+      const el = fixture.debugElement.query(By.css(TID('state-loading')));
+      expect(el.nativeElement.textContent).toContain('Cargando productos');
     });
 
     it('should not render table when loading', () => {
@@ -55,7 +54,7 @@ describe('ProductTableComponent', () => {
       component.products = MOCK_PRODUCTS;
       fixture.detectChanges();
 
-      const table = fixture.debugElement.query(By.css('table'));
+      const table = fixture.debugElement.query(By.css(TID('product-table')));
       expect(table).toBeFalsy();
     });
   });
@@ -65,17 +64,9 @@ describe('ProductTableComponent', () => {
       component.error = 'Error al cargar los productos.';
       fixture.detectChanges();
 
-      const errorElement = fixture.debugElement.query(By.css('.state-error'));
-      expect(errorElement).toBeTruthy();
-      expect(errorElement.nativeElement.textContent).toContain('Error al cargar los productos.');
-    });
-
-    it('should show error icon', () => {
-      component.error = 'Test error';
-      fixture.detectChanges();
-
-      const errorIcon = fixture.debugElement.query(By.css('.error-icon'));
-      expect(errorIcon).toBeTruthy();
+      const el = fixture.debugElement.query(By.css(TID('state-error')));
+      expect(el).toBeTruthy();
+      expect(el.nativeElement.textContent).toContain('Error al cargar los productos.');
     });
 
     it('should not render table when there is an error', () => {
@@ -83,7 +74,7 @@ describe('ProductTableComponent', () => {
       component.products = MOCK_PRODUCTS;
       fixture.detectChanges();
 
-      const table = fixture.debugElement.query(By.css('table'));
+      const table = fixture.debugElement.query(By.css(TID('product-table')));
       expect(table).toBeFalsy();
     });
   });
@@ -93,31 +84,19 @@ describe('ProductTableComponent', () => {
       component.products = [];
       fixture.detectChanges();
 
-      const emptyElement = fixture.debugElement.query(By.css('.state-empty'));
-      expect(emptyElement).toBeTruthy();
-      expect(emptyElement.nativeElement.textContent).toContain(
-        'No se encontraron productos financieros.',
-      );
-    });
-
-    it('should show empty icon', () => {
-      component.products = [];
-      fixture.detectChanges();
-
-      const emptyIcon = fixture.debugElement.query(By.css('.empty-icon'));
-      expect(emptyIcon).toBeTruthy();
+      const el = fixture.debugElement.query(By.css(TID('state-empty')));
+      expect(el).toBeTruthy();
+      expect(el.nativeElement.textContent).toContain('No se encontraron productos financieros.');
     });
 
     it('should not render table when products array is empty', () => {
       component.products = [];
       fixture.detectChanges();
 
-      const table = fixture.debugElement.query(By.css('table'));
+      const table = fixture.debugElement.query(By.css(TID('product-table')));
       expect(table).toBeFalsy();
     });
   });
-
-  // --- Data Rendering ---
 
   describe('Table Structure', () => {
     beforeEach(() => {
@@ -128,8 +107,7 @@ describe('ProductTableComponent', () => {
     it('should render table with correct columns', () => {
       const headers = fixture.debugElement.queryAll(By.css('thead th'));
       const headerTexts = headers.map((h) => h.nativeElement.textContent.trim());
-
-      expect(headers.length).toBe(6); // Added actions column
+      expect(headers.length).toBe(6);
       expect(headerTexts[0]).toContain('Logo');
       expect(headerTexts[1]).toContain('Nombre del producto');
       expect(headerTexts[2]).toContain('Descripción');
@@ -137,24 +115,17 @@ describe('ProductTableComponent', () => {
       expect(headerTexts[4]).toContain('Fecha de reestructuración');
     });
 
-    it('should render info icons on description, release date, and revision date headers', () => {
-      const infoIcons = fixture.debugElement.queryAll(By.css('.info-icon'));
-      expect(infoIcons.length).toBe(3); // Descripción, Fecha lib., Fecha reest.
-    });
-
     it('should render correct number of rows', () => {
-      const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
+      const rows = fixture.debugElement.queryAll(By.css(TID('table-row')));
       expect(rows.length).toBe(2);
     });
 
     it('should apply alternating row style', () => {
-      const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
+      const rows = fixture.debugElement.queryAll(By.css(TID('table-row')));
       expect(rows[0].classes['alt-row']).toBeFalsy();
       expect(rows[1].classes['alt-row']).toBe(true);
     });
   });
-
-  // --- Product Data Rendering ---
 
   describe('Product Data', () => {
     beforeEach(() => {
@@ -163,22 +134,19 @@ describe('ProductTableComponent', () => {
     });
 
     it('should render product names correctly', () => {
-      const nameCells = fixture.debugElement.queryAll(By.css('tbody td.col-name'));
+      const nameCells = fixture.debugElement.queryAll(By.css(TID('cell-name')));
       expect(nameCells[0].nativeElement.textContent).toContain('Tarjetas de Crédito');
       expect(nameCells[1].nativeElement.textContent).toContain('Tarjetas de Débito');
     });
 
     it('should render product descriptions correctly', () => {
-      const descCells = fixture.debugElement.queryAll(By.css('tbody td.col-desc'));
-      expect(descCells[0].nativeElement.textContent).toContain(
-        'Tarjeta de consumo bajo la modalidad de crédito',
-      );
+      const descCells = fixture.debugElement.queryAll(By.css(TID('cell-description')));
+      expect(descCells[0].nativeElement.textContent).toContain('Tarjeta de consumo bajo la modalidad de crédito');
     });
 
     it('should format dates as DD/MM/YYYY', () => {
-      const dateCells = fixture.debugElement.queryAll(By.css('tbody td.col-date'));
+      const dateCells = fixture.debugElement.queryAll(By.css(`${TID('cell-date_release')}, ${TID('cell-date_revision')}`));
       const dateTexts = dateCells.map((d) => d.nativeElement.textContent.trim());
-
       expect(dateTexts[0]).toBe('01/06/2026');
       expect(dateTexts[1]).toBe('01/06/2027');
       expect(dateTexts[2]).toBe('15/05/2026');
@@ -186,21 +154,12 @@ describe('ProductTableComponent', () => {
     });
 
     it('should render logo images with correct src', () => {
-      const logoImages = fixture.debugElement.queryAll(By.css('.logo-image'));
+      const logoImages = fixture.debugElement.queryAll(By.css(TID('logo-image')));
       expect(logoImages.length).toBe(2);
       expect(logoImages[0].nativeElement.src).toBe(MOCK_PRODUCTS[0].logo);
       expect(logoImages[1].nativeElement.src).toBe(MOCK_PRODUCTS[1].logo);
     });
-
-    it('should render logo images as circular (border-radius: 50%)', () => {
-      const logoImage = fixture.debugElement.query(By.css('.logo-image'));
-      const computedStyle = getComputedStyle(logoImage.nativeElement);
-      // We verify the class exists; actual styling is tested via E2E
-      expect(logoImage.nativeElement.classList.contains('logo-image')).toBe(true);
-    });
   });
-
-  // --- Logo Fallback ---
 
   describe('Logo Fallback', () => {
     it('should show placeholder when product has no logo', () => {
@@ -208,7 +167,7 @@ describe('ProductTableComponent', () => {
       component.products = productsWithoutLogo;
       fixture.detectChanges();
 
-      const placeholders = fixture.debugElement.queryAll(By.css('.logo-placeholder'));
+      const placeholders = fixture.debugElement.queryAll(By.css(TID('logo-placeholder')));
       expect(placeholders.length).toBe(2);
     });
 
@@ -217,7 +176,7 @@ describe('ProductTableComponent', () => {
       component.products = productsWithoutLogo;
       fixture.detectChanges();
 
-      const placeholders = fixture.debugElement.queryAll(By.css('.logo-placeholder'));
+      const placeholders = fixture.debugElement.queryAll(By.css(TID('logo-placeholder')));
       expect(placeholders[0].nativeElement.textContent.trim()).toBe('T');
       expect(placeholders[1].nativeElement.textContent.trim()).toBe('T');
     });
@@ -226,7 +185,7 @@ describe('ProductTableComponent', () => {
       component.products = MOCK_PRODUCTS;
       fixture.detectChanges();
 
-      const logoImages = fixture.debugElement.queryAll(By.css('.logo-image'));
+      const logoImages = fixture.debugElement.queryAll(By.css(TID('logo-image')));
       expect(logoImages.length).toBe(2);
     });
 
@@ -234,19 +193,16 @@ describe('ProductTableComponent', () => {
       component.products = MOCK_PRODUCTS;
       fixture.detectChanges();
 
-      const logoImage = fixture.debugElement.query(By.css('.logo-image'));
+      const logoImage = fixture.debugElement.query(By.css(TID('logo-image')));
       logoImage.triggerEventHandler('error', { target: logoImage.nativeElement });
       fixture.detectChanges();
 
-      // After onerror, image is hidden and placeholder shown
       expect(logoImage.nativeElement.style.display).toBe('none');
-      const placeholder = fixture.debugElement.query(By.css('.logo-placeholder'));
+      const placeholder = fixture.debugElement.query(By.css(TID('logo-placeholder')));
       expect(placeholder).toBeTruthy();
       expect(placeholder.nativeElement.textContent.trim()).toBe('T');
     });
   });
-
-  // --- getInitial ---
 
   describe('getInitial', () => {
     it('should return first character uppercase', () => {

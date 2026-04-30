@@ -1,118 +1,148 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ProductFormComponent } from './product-form.component';
 import { IdExistsValidator } from '../../../../shared/validators/id-exists.validator';
 
 describe('ProductFormComponent', () => {
   let component: ProductFormComponent;
   let fixture: ComponentFixture<ProductFormComponent>;
+  let httpMock: HttpTestingController;
+
+  // --- Helpers ---
+
+  function createComponent(): void {
+    fixture = TestBed.createComponent(ProductFormComponent);
+    component = fixture.componentInstance;
+  }
+
+  function createEditComponent(): { comp: ProductFormComponent; fix: ComponentFixture<ProductFormComponent> } {
+    const fix = TestBed.createComponent(ProductFormComponent);
+    const comp = fix.componentInstance;
+    comp.isEditMode = true;
+    comp.product = {
+      id: 'trj-crd',
+      name: 'Test',
+      description: 'Descripción de prueba',
+      logo: 'https://x.com/logo.png',
+      date_release: '2026-06-01',
+      date_revision: '2027-06-01',
+    };
+    fix.detectChanges();
+    return { comp, fix };
+  }
+
+  function fillFormValid(): void {
+    component.form.patchValue({
+      id: 'test-id',
+      name: 'Producto de Prueba',
+      description: 'Descripción de producto de prueba',
+      logo: 'https://example.com/logo.png',
+      date_release: '2099-12-31',
+    });
+    component.form.get('date_revision')?.setValue('2100-12-31', { emitEvent: false });
+  }
+
+  /** Flush pending async validator HTTP requests so the form stabilizes. */
+  function flushAsyncValidator(): void {
+    try {
+      const req = httpMock.expectOne(() => true);
+      req.flush(false);
+    } catch (_) {
+      // no pending request
+    }
+  }
+
+  // --- Setup ---
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ProductFormComponent,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-      ],
+      imports: [ProductFormComponent, ReactiveFormsModule, HttpClientTestingModule],
       providers: [IdExistsValidator],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ProductFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  // --- Rendering ---
+  // =====================================================
+  // FormGroup Logic (NO detectChanges, NO DOM queries)
+  // =====================================================
 
-  describe('Rendering', () => {
-    it('should render all 6 form fields', () => {
-      const inputs = fixture.debugElement.queryAll(By.css('input, textarea'));
-      const ids = inputs.map((i) => i.nativeElement.id);
-      expect(ids).toContain('id');
-      expect(ids).toContain('name');
-      expect(ids).toContain('description');
-      expect(ids).toContain('logo');
-      expect(ids).toContain('date_release');
-      expect(ids).toContain('date_revision');
+  describe('FormGroup logic', () => {
+    beforeEach(() => {
+      createComponent();
+      fixture.detectChanges(); // solo init
     });
 
-    it('should show form title "Formulario de Registro"', () => {
-      const title = fixture.debugElement.query(By.css('.form-title'));
-      expect(title.nativeElement.textContent).toContain('Formulario de Registro');
+    it('should have 6 controls initialized', () => {
+      expect(component.form.get('id')).toBeTruthy();
+      expect(component.form.get('name')).toBeTruthy();
+      expect(component.form.get('description')).toBeTruthy();
+      expect(component.form.get('logo')).toBeTruthy();
+      expect(component.form.get('date_release')).toBeTruthy();
+      expect(component.form.get('date_revision')).toBeTruthy();
     });
 
-    it('should render submit and reset buttons', () => {
-      const buttons = fixture.debugElement.queryAll(By.css('button'));
-      const btnTexts = buttons.map((b) => b.nativeElement.textContent.trim());
-      expect(btnTexts).toContain('Reiniciar');
-      expect(btnTexts).toContain('Agregar');
+    it('should be invalid when empty', () => {
+      expect(component.form.valid).toBe(false);
     });
-  });
 
-  // --- Validation ---
-
-  describe('Validation', () => {
-    it('should show required errors on empty submit', () => {
+    it('should mark all fields as touched on submit', () => {
       component.onSubmit();
-      fixture.detectChanges();
-
-      const errors = fixture.debugElement.queryAll(By.css('.field-error'));
-      expect(errors.length).toBeGreaterThan(0);
+      expect(component.form.get('id')?.touched).toBe(true);
+      expect(component.form.get('name')?.touched).toBe(true);
     });
 
-    it('should show error for id with 2 chars after markAsTouched', () => {
-      const idControl = component.form.get('id')!;
-      idControl.setValue('ab');
-      idControl.markAsTouched();
-      idControl.updateValueAndValidity();
-      fixture.detectChanges();
+    it('should validate id minlength (3 chars)', () => {
+      const ctrl = component.form.get('id')!;
+      ctrl.setValue('ab');
+      ctrl.markAsTouched();
+      ctrl.updateValueAndValidity();
 
-      // ID with 2 chars should be invalid (minLength 3)
-      expect(idControl.invalid).toBe(true);
-      const error = fixture.debugElement.query(By.css('.field-error'));
-      expect(error).toBeTruthy();
+      expect(ctrl.invalid).toBe(true);
+      expect(ctrl.errors).toEqual({
+        minlength: { requiredLength: 3, actualLength: 2 },
+      });
     });
 
-    it('should show error for name with 4 chars', () => {
-      const nameControl = component.form.get('name')!;
-      nameControl.setValue('abcd');
-      nameControl.markAsTouched();
-      nameControl.updateValueAndValidity();
-      fixture.detectChanges();
+    it('should validate name minlength (5 chars)', () => {
+      const ctrl = component.form.get('name')!;
+      ctrl.setValue('abcd');
+      ctrl.markAsTouched();
+      ctrl.updateValueAndValidity();
 
-      expect(nameControl.invalid).toBe(true);
+      expect(ctrl.invalid).toBe(true);
+      expect(ctrl.errors).toEqual({
+        minlength: { requiredLength: 5, actualLength: 4 },
+      });
     });
 
-    it('should show error for description with 9 chars', () => {
-      const descControl = component.form.get('description')!;
-      descControl.setValue('123456789');
-      descControl.markAsTouched();
-      descControl.updateValueAndValidity();
-      fixture.detectChanges();
+    it('should validate description minlength (10 chars)', () => {
+      const ctrl = component.form.get('description')!;
+      ctrl.setValue('123456789');
+      ctrl.markAsTouched();
+      ctrl.updateValueAndValidity();
 
-      expect(descControl.invalid).toBe(true);
+      expect(ctrl.invalid).toBe(true);
+      expect(ctrl.errors).toEqual({
+        minlength: { requiredLength: 10, actualLength: 9 },
+      });
     });
 
-    it('should show dateNotPast error for past date', () => {
-      const dateControl = component.form.get('date_release')!;
-      dateControl.setValue('2020-01-01');
-      dateControl.markAsTouched();
-      dateControl.updateValueAndValidity();
-      fixture.detectChanges();
+    it('should validate date_release is not in the past', () => {
+      const ctrl = component.form.get('date_release')!;
+      ctrl.setValue('2020-01-01');
+      ctrl.markAsTouched();
+      ctrl.updateValueAndValidity();
 
-      expect(dateControl.invalid).toBe(true);
-      expect(dateControl.errors).toEqual({ dateNotPast: true });
+      expect(ctrl.invalid).toBe(true);
+      expect(ctrl.errors).toEqual({ dateNotPast: true });
     });
-  });
 
-  // --- Date Revision Auto-Calculate ---
-
-  describe('Date revision', () => {
-    it('should auto-calculate date_revision when date_release changes', () => {
+    it('should auto-calculate date_revision = date_release + 1 year', () => {
       component.form.get('date_release')?.setValue('2026-06-15');
-      fixture.detectChanges();
+      fixture.detectChanges(); // needed because valueChanges subscription
       expect(component.form.get('date_revision')?.value).toBe('2027-06-15');
     });
 
@@ -124,26 +154,17 @@ describe('ProductFormComponent', () => {
       expect(component.form.get('date_revision')?.value).toBe('');
     });
 
-    it('should disable date_revision field', () => {
+    it('should have date_revision disabled', () => {
       expect(component.form.get('date_revision')?.disabled).toBe(true);
     });
-  });
 
-  // --- Submit and Reset ---
-
-  describe('Submit and Reset', () => {
-    function fillFormValid(): void {
-      component.form.patchValue({
-        id: 'test-id',
-        name: 'Producto de Prueba',
-        description: 'Descripción de producto de prueba',
-        logo: 'https://example.com/logo.png',
-        date_release: '2099-12-31',
-      });
-      // Set revision via the control (disabled field must use setValue on the raw control)
-      component.form.get('date_revision')?.setValue('2100-12-31', { emitEvent: false });
-      fixture.detectChanges();
-    }
+    it('should be valid with correct data', () => {
+      fillFormValid();
+      // Flush the async ID verification request
+      const req = httpMock.expectOne(() => true);
+      req.flush(false);
+      expect(component.form.valid).toBe(true);
+    });
 
     it('should emit formSubmit with valid data', () => {
       const emitSpy = jest.spyOn(component.formSubmit, 'emit');
@@ -155,7 +176,7 @@ describe('ProductFormComponent', () => {
       );
     });
 
-    it('should emit formReset when reset button clicked', () => {
+    it('should emit formReset on reset', () => {
       const emitSpy = jest.spyOn(component.formReset, 'emit');
       component.onReset();
       expect(emitSpy).toHaveBeenCalledTimes(1);
@@ -167,56 +188,101 @@ describe('ProductFormComponent', () => {
       expect(component.form.get('id')?.value).toBeNull();
       expect(component.form.get('name')?.value).toBeNull();
     });
-
-    it('should disable submit button when form is invalid', () => {
-      const submitBtn = fixture.debugElement.query(By.css('.btn-submit'));
-      expect(submitBtn).toBeTruthy();
-      expect(component.form.invalid).toBe(true);
-    });
   });
 
-  // --- Edit Mode (SPEC-005) ---
+  // =====================================================
+  // DOM Rendering (data-testid selectors + detectChanges)
+  // =====================================================
 
-  describe('Edit mode', () => {
-    it('should show "Formulario de Registro" title in edit mode', async () => {
-      const editFixture = TestBed.createComponent(ProductFormComponent);
-      const editComponent = editFixture.componentInstance;
-      editComponent.isEditMode = true;
-      editComponent.product = {
-        id: 'trj-crd',
-        name: 'Test',
-        description: 'Descripción de prueba',
-        logo: 'https://x.com/logo.png',
-        date_release: '2026-06-01',
-        date_revision: '2027-06-01',
-      };
-      editFixture.detectChanges();
+  describe('DOM rendering', () => {
+    beforeEach(() => {
+      createComponent();
+      fixture.detectChanges();
+    });
 
-      const title = editFixture.debugElement.query(By.css('.form-title'));
+    it('should render form title', () => {
+      const title = fixture.debugElement.query(By.css('[data-testid="form-title"]'));
       expect(title.nativeElement.textContent).toContain('Formulario de Registro');
     });
 
-    it('should disable id field in edit mode', async () => {
-      const editFixture = TestBed.createComponent(ProductFormComponent);
-      const editComponent = editFixture.componentInstance;
-      editComponent.isEditMode = true;
-      editComponent.product = {
-        id: 'trj-crd',
-        name: 'Test',
-        description: 'Descripción de prueba',
-        logo: 'https://x.com/logo.png',
-        date_release: '2026-06-01',
-        date_revision: '2027-06-01',
-      };
-      editFixture.detectChanges();
+    it('should render all 6 form fields with data-testid', () => {
+      const ids = ['field-id', 'field-name', 'field-description', 'field-logo', 'field-date_release', 'field-date_revision'];
+      ids.forEach((testId) => {
+        const el = fixture.debugElement.query(By.css(`[data-testid="${testId}"]`));
+        expect(el).toBeTruthy();
+      });
+    });
 
-      expect(editComponent.form.get('id')?.disabled).toBe(true);
+    it('should render submit and reset buttons', () => {
+      const resetBtn = fixture.debugElement.query(By.css('[data-testid="btn-reset"]'));
+      const submitBtn = fixture.debugElement.query(By.css('[data-testid="btn-submit"]'));
+      expect(resetBtn.nativeElement.textContent.trim()).toBe('Reiniciar');
+      expect(submitBtn.nativeElement.textContent.trim()).toBe('Agregar');
+    });
+
+    it('should disable submit button when form is invalid', () => {
+      const submitBtn = fixture.debugElement.query(By.css('[data-testid="btn-submit"]'));
+      expect(component.form.invalid).toBe(true);
+      expect(submitBtn.nativeElement.disabled).toBe(true);
+    });
+
+    it('should show field errors after invalid submit', () => {
+      component.onSubmit();
+      fixture.detectChanges();
+      const errors = fixture.debugElement.queryAll(By.css('[data-testid^="error-"]'));
+      expect(errors.length).toBeGreaterThan(0);
+    });
+
+    it('should show specific error for invalid id', () => {
+      const ctrl = component.form.get('id')!;
+      ctrl.setValue('ab');
+      ctrl.markAsTouched();
+      ctrl.updateValueAndValidity();
+      flushAsyncValidator();
+      fixture.detectChanges();
+
+      const errorEl = fixture.debugElement.query(By.css('[data-testid="error-id"]'));
+      expect(errorEl).toBeTruthy();
+    });
+
+    it('should show error for past date_release', () => {
+      const ctrl = component.form.get('date_release')!;
+      ctrl.setValue('2020-01-01');
+      ctrl.markAsTouched();
+      ctrl.updateValueAndValidity();
+      fixture.detectChanges();
+
+      const errorEl = fixture.debugElement.query(By.css('[data-testid="error-date_release"]'));
+      expect(errorEl).toBeTruthy();
+    });
+
+    it('should render date_revision as disabled input', () => {
+      const revisionInput = fixture.debugElement.query(By.css('[data-testid="field-date_revision"]'));
+      expect(revisionInput.nativeElement.disabled).toBe(true);
+    });
+
+    describe('Edit mode', () => {
+      it('should disable id field', () => {
+        const { comp } = createEditComponent();
+        expect(comp.form.get('id')?.disabled).toBe(true);
+      });
+
+      it('should show form title in edit mode', () => {
+        const { fix } = createEditComponent();
+        const title = fix.debugElement.query(By.css('[data-testid="form-title"]'));
+        expect(title.nativeElement.textContent).toContain('Formulario de Registro');
+      });
     });
   });
 
   // --- Cleanup ---
 
   describe('Cleanup', () => {
+    beforeEach(() => {
+      createComponent();
+      fixture.detectChanges();
+    });
+
     it('should complete destroy$ on destroy', () => {
       const nextSpy = jest.spyOn(component['destroy$'], 'next');
       component.ngOnDestroy();

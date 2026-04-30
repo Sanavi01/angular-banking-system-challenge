@@ -1,9 +1,9 @@
 <div class="menu-container">
-  <button class="menu-trigger" (click)="toggle($event)" title="Acciones">
+  <button class="menu-trigger" data-testid="menu-trigger" (click)="toggle($event)" title="Acciones">
     &#8942;
   </button>
 
-  <div *ngIf="isOpen" class="menu-dropdown" (click)="$event.stopPropagation()">
-    <button class="menu-item" (click)="onEdit()">Editar</button>
+  <div *ngIf="isOpen" class="menu-dropdown" data-testid="menu-dropdown" (click)="$event.stopPropagation()">
+    <button class="menu-item" data-testid="menu-item-edit" (click)="onEdit()">Editar</button>
   </div>
 </div>

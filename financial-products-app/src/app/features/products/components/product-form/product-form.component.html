@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="product-form" novalidate>
-  <h2 class="form-title">Formulario de Registro</h2>
+  <h2 class="form-title" data-testid="form-title">Formulario de Registro</h2>
 
   <div class="form-grid">
     <!-- ID -->
@@ -9,9 +9,10 @@
         id="id"
         type="text"
         formControlName="id"
+        data-testid="field-id"
         placeholder=""
       />
-      <span *ngIf="getErrorMessage('id')" class="field-error">
+      <span *ngIf="getErrorMessage('id')" class="field-error" data-testid="error-id">
         {{ getErrorMessage('id') }}
       </span>
     </div>
@@ -23,9 +24,10 @@
         id="name"
         type="text"
         formControlName="name"
+        data-testid="field-name"
         placeholder=""
       />
-      <span *ngIf="getErrorMessage('name')" class="field-error">
+      <span *ngIf="getErrorMessage('name')" class="field-error" data-testid="error-name">
         {{ getErrorMessage('name') }}
       </span>
     </div>
@@ -37,9 +39,10 @@
         id="description"
         type="text"
         formControlName="description"
+        data-testid="field-description"
         placeholder=""
       />
-      <span *ngIf="getErrorMessage('description')" class="field-error">
+      <span *ngIf="getErrorMessage('description')" class="field-error" data-testid="error-description">
         {{ getErrorMessage('description') }}
       </span>
     </div>
@@ -51,9 +54,10 @@
         id="logo"
         type="text"
         formControlName="logo"
+        data-testid="field-logo"
         placeholder=""
       />
-      <span *ngIf="getErrorMessage('logo')" class="field-error">
+      <span *ngIf="getErrorMessage('logo')" class="field-error" data-testid="error-logo">
         {{ getErrorMessage('logo') }}
       </span>
     </div>
@@ -65,8 +69,9 @@
         id="date_release"
         type="date"
         formControlName="date_release"
+        data-testid="field-date_release"
       />
-      <span *ngIf="getErrorMessage('date_release')" class="field-error">
+      <span *ngIf="getErrorMessage('date_release')" class="field-error" data-testid="error-date_release">
         {{ getErrorMessage('date_release') }}
       </span>
     </div>
@@ -78,16 +83,18 @@
         id="date_revision"
         type="date"
         formControlName="date_revision"
+        data-testid="field-date_revision"
       />
     </div>
   </div>
 
   <!-- Buttons -->
   <div class="form-actions">
-    <button type="button" class="btn-reset" (click)="onReset()">Reiniciar</button>
+    <button type="button" class="btn-reset" data-testid="btn-reset" (click)="onReset()">Reiniciar</button>
     <button
       type="submit"
       class="btn-submit"
+      data-testid="btn-submit"
       [disabled]="form.invalid || submitting"
     >
       {{ submitting ? 'Agregando...' : 'Agregar' }}
