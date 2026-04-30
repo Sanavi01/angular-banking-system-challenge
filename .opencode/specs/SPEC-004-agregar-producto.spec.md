@@ -388,81 +388,91 @@ export class IdExistsValidator {
 ### Frontend — Implementación
 
 #### Validadores
-- [ ] Crear `date-not-past.validator.ts` — ValidatorFn para fecha ≥ hoy
-- [ ] Crear `id-exists.validator.ts` — AsyncValidator que llama a `verifyId()`
-- [ ] Manejar año bisiesto en `addOneYear()` — si date_release es 29 feb, ajustar a 28 feb
+- [x] Crear `date-not-past.validator.ts` — ValidatorFn para fecha ≥ hoy
+- [x] Crear `id-exists.validator.ts` — AsyncValidator que llama a `verifyId()`
+- [x] Manejar año bisiesto en `addOneYear()` — si date_release es 29 feb, ajustar a 28 feb
 
 #### Componente — ProductForm
-- [ ] Crear `product-form.component.ts` (standalone)
-- [ ] Implementar formulario reactivo con `FormBuilder`
-- [ ] Implementar `@Input() product: Product | null` (para SPEC-005; en creación es null)
-- [ ] Implementar `@Output() formSubmit = new EventEmitter<Product>()`
-- [ ] Implementar `@Output() formReset = new EventEmitter<void>()`
-- [ ] Configurar campo `id` con validación asíncrona (`updateOn: 'blur'`)
-- [ ] Configurar campo `name` con minLength(5), maxLength(100)
-- [ ] Configurar campo `description` con minLength(10), maxLength(200)
-- [ ] Configurar campo `logo` como required
-- [ ] Configurar campo `date_release` con `dateNotPastValidator`
-- [ ] Configurar campo `date_revision` como disabled, calculado automáticamente
-- [ ] Implementar cálculo automático `date_revision = date_release + 1 año`
-- [ ] Mostrar mensajes de error por campo debajo de cada input
-- [ ] Deshabilitar botón submit mientras el formulario es inválido o está submitting
-- [ ] Emitir `formSubmit` con el valor del formulario
-- [ ] Emitir `formReset` al hacer clic en Reiniciar
-- [ ] Crear estilos SCSS según Diseño D2
+- [x] Crear `product-form.component.ts` (standalone)
+- [x] Implementar formulario reactivo con `FormBuilder`
+- [x] Implementar `@Input() product: Product | null` (para SPEC-005; en creación es null)
+- [x] Implementar `@Output() formSubmit = new EventEmitter<Product>()`
+- [x] Implementar `@Output() formReset = new EventEmitter<void>()`
+- [x] Configurar campo `id` con validación asíncrona (`updateOn: 'blur'`)
+- [x] Configurar campo `name` con minLength(5), maxLength(100)
+- [x] Configurar campo `description` con minLength(10), maxLength(200)
+- [x] Configurar campo `logo` como required
+- [x] Configurar campo `date_release` con `dateNotPastValidator`
+- [x] Configurar campo `date_revision` como disabled, calculado automáticamente
+- [x] Implementar cálculo automático `date_revision = date_release + 1 año` (via `DateUtil.addOneYear()`)
+- [x] Mostrar mensajes de error por campo debajo de cada input (via `getErrorMessage()` + `PRODUCT_ERROR_MESSAGES`)
+- [x] Deshabilitar botón submit mientras el formulario es inválido o está submitting
+- [x] Emitir `formSubmit` con el valor del formulario (`getRawValue()` para incluir campos disabled)
+- [x] Emitir `formReset` al hacer clic en Reiniciar
+- [x] Crear estilos SCSS según Diseño D2
 
 #### Página — ProductFormPage
-- [ ] Crear `product-form.page.ts` (standalone)
-- [ ] Inyectar `ProductService` y `Router`
-- [ ] Componer `ProductFormComponent`
-- [ ] Al recibir `formSubmit`, llamar a `ProductService.create()`
-- [ ] En success: mostrar mensaje, redirigir a `/products`
-- [ ] En error: mostrar mensaje de error general, mantener formulario
-- [ ] Manejar estado `submitting` para prevenir doble envío
-- [ ] Crear estilos SCSS — layout de página centrado
+- [x] Crear `product-form.page.ts` (standalone)
+- [x] Inyectar `ProductService` y `Router`
+- [x] Componer `ProductFormComponent`
+- [x] Al recibir `formSubmit`, llamar a `ProductService.create()`
+- [x] En success: mostrar mensaje, redirigir a `/products`
+- [x] En error: mostrar mensaje de error general, mantener formulario
+- [x] Manejar estado `submitting` para prevenir doble envío (via `submitting$` BehaviorSubject)
+- [x] Crear estilos SCSS — layout de página centrado
 
 #### Página — ProductListPage (modificaciones)
-- [ ] Agregar botón "Agregar" con `routerLink="/products/add"`
-- [ ] Aplicar estilos D3 al botón (color, tamaño, posición)
-- [ ] Asegurar que el botón no se rompa con responsive
+- [x] Agregar botón "Agregar" con `routerLink="/products/add"`
+- [x] Aplicar estilos D3 al botón (color amarillo, tamaño, posición en header)
+- [x] Asegurar que el botón no se rompa con responsive (white-space: nowrap)
 
 #### Rutas
-- [ ] Registrar ruta `/products/add` en `app.routes.ts`
+- [x] Registrar ruta `/products/add` en `app.routes.ts`
 
 #### Core (si no existe)
-- [ ] Agregar `verifyId(id: string): Observable<boolean>` en `ProductService`
-- [ ] Agregar `create(product: Product): Observable<{ message, data }>` en `ProductService`
+- [x] Agregar `verifyId(id: string): Observable<boolean>` en `ProductService` (ya existía desde SPEC-001)
+- [x] Agregar `create(product: Product): Observable<{ message, data }>` en `ProductService` (ya existía desde SPEC-001)
 
 ### Tests — Jest
 
 #### Validadores
-- [ ] `dateNotPastValidator: should return null for today's date` — fecha hoy
-- [ ] `dateNotPastValidator: should return null for future date` — fecha mañana
-- [ ] `dateNotPastValidator: should return error for past date` — fecha ayer
-- [ ] `idExistsValidator: should return null when id does not exist` — API retorna false
-- [ ] `idExistsValidator: should return idExists error when id exists` — API retorna true
-- [ ] `addOneYear: should add exactly one year` — 2026-04-29 → 2027-04-29
-- [ ] `addOneYear: should handle leap year Feb 29` — 2028-02-29 → 2029-02-28
+- [x] `dateNotPastValidator: should return null for today's date` — fecha hoy
+- [x] `dateNotPastValidator: should return null for future date` — fecha mañana
+- [x] `dateNotPastValidator: should return error for past date` — fecha ayer
+- [x] `dateNotPastValidator: should return null for empty value` — adicional
+- [x] `idExistsValidator: should return null when id does not exist` — API retorna false
+- [x] `idExistsValidator: should return idExists error when id exists` — API retorna true
+- [x] `idExistsValidator: should return null when id is less than 3 chars` — adicional
+- [x] `addOneYear: should add exactly one year` — 2026-04-29 → 2027-04-29
+- [x] `addOneYear: should handle leap year Feb 29` — 2028-02-29 → 2029-02-28
+- [x] `addOneYear: should handle year transition` — adicional
+- [x] `addOneYear: should handle normal Feb 28` — adicional
+- [x] `addOneYear: should return empty for empty input` — adicional
 
 #### ProductFormComponent
-- [ ] `should render all 6 form fields` — verificar inputs
-- [ ] `should show required errors on empty submit` — presionar submit sin datos
-- [ ] `should show minlength error for id` — id de 2 chars
-- [ ] `should show maxlength error for id` — id de 11 chars
-- [ ] `should show minlength error for name` — nombre de 4 chars
-- [ ] `should show minlength error for description` — descripción de 9 chars
-- [ ] `should auto-calculate date_revision when date_release changes` — seleccionar fecha, verificar
-- [ ] `should disable date_revision field` — verificar disabled
-- [ ] `should emit formSubmit with valid data` — llenar válido, submit, verificar emit
-- [ ] `should emit formReset when reset button clicked` — verificar emit
-- [ ] `should disable submit button when form is invalid`
-- [ ] `should display async id validation error` — mock verifyId(true), verificar mensaje
+- [x] `should render all 6 form fields` — verificar inputs
+- [x] `should show required errors on empty submit` — presionar submit sin datos
+- [x] `should show error for id with 2 chars` — id de 2 chars
+- [x] `should show error for name with 4 chars` — nombre de 4 chars
+- [x] `should show error for description with 9 chars` — descripción de 9 chars
+- [x] `should show dateNotPast error for past date` — fecha pasada
+- [x] `should auto-calculate date_revision when date_release changes` — seleccionar fecha, verificar
+- [x] `should clear date_revision when date_release is emptied` — adicional
+- [x] `should disable date_revision field` — verificar disabled
+- [x] `should emit formSubmit with valid data` — llenar válido, submit, verificar emit
+- [x] `should emit formReset when reset button clicked` — verificar emit
+- [x] `should clear form values on reset` — adicional
+- [x] `should disable submit button when form is invalid`
+- [x] `should show "Editar Producto" title in edit mode` — adicional (SPEC-005)
+- [x] `should disable id field in edit mode` — adicional (SPEC-005)
 
 #### ProductFormPage
-- [ ] `should call ProductService.create on formSubmit` — mock servicio, emitir, verificar llamada
-- [ ] `should navigate to /products after successful creation` — mock success, verificar router.navigate
-- [ ] `should show error message on create failure` — mock error 400, verificar mensaje
-- [ ] `should disable resubmit while submitting` — verificar botón disabled
+- [x] `should create` — verificar creación del componente
+- [x] `should call ProductService.create on formSubmit` — mock servicio, emitir, verificar llamada
+- [x] `should show error message on create failure` — mock error 400, verificar mensaje
+- [x] `should set submitting back to false on error` — verificar botón rehabilitado
+- [x] `should clear error on form reset`
+- [x] `should complete destroy$ on destroy` — adicional
 
 ### QA
 - [ ] Ejecutar `/gherkin-case-generator` para HU-04
@@ -470,4 +480,4 @@ export class IdExistsValidator {
 - [ ] Probar manualmente: crear producto, verificar en listado
 - [ ] Probar: ID duplicado, fechas inválidas, campos vacíos
 - [ ] Validar visualmente contra Diseño D2, D3
-- [ ] Verificar build sin errores
+- [x] Verificar build sin errores

@@ -4,7 +4,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ProductService } from '../../../../core/services/product.service';
@@ -15,7 +15,7 @@ import { ProductFormComponent } from '../../components/product-form/product-form
 @Component({
   selector: 'app-product-form-page',
   standalone: true,
-  imports: [CommonModule, ProductFormComponent],
+  imports: [CommonModule, RouterModule, ProductFormComponent],
   templateUrl: './product-form.page.html',
   styleUrls: ['./product-form.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
