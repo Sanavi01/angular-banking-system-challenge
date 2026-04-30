@@ -20,4 +20,11 @@ export const routes: Routes = [
         './features/products/pages/product-form/product-form.page'
       ).then((m) => m.ProductFormPage),
   },
+  {
+    path: 'products/edit/:id',
+    loadComponent: () =>
+      import(
+        './features/products/pages/product-form/product-form.page'
+      ).then((m) => m.ProductFormPage),
+  },
 ];

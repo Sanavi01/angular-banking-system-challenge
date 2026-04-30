@@ -1,6 +1,6 @@
 ---
 id: SPEC-005
-status: APPROVED
+status: IMPLEMENTED
 feature: f5-editar-producto
 created: 2026-04-29
 updated: 2026-04-29
@@ -12,7 +12,7 @@ related-specs: []
 
 # Spec: F5 — Editar Producto Financiero
 
-> **Estado:** `DRAFT`
+> **Estado:** `IMPLEMENTED`
 > **Diseño de referencia:** D2 (Formulario), D3 (Menú contextual)
 > **Tipo:** Deseable (SemiSenior)
 > **Depende de:** SPEC-001 (tabla con productos), SPEC-004 (formulario y validaciones)

@@ -34,6 +34,7 @@ export class ProductListPage implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     public state: ProductStateService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -55,5 +56,9 @@ export class ProductListPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onEditProduct(id: string): void {
+    this.router.navigate(['/products/edit', id]);
   }
 }

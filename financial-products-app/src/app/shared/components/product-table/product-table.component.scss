@@ -13,7 +13,6 @@ $color-info-icon: #9e9e9e;
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
 }
 
 .state-message {
@@ -119,6 +118,11 @@ $color-info-icon: #9e9e9e;
   .col-date {
     width: 130px;
     white-space: nowrap;
+  }
+
+  .col-actions {
+    width: 56px;
+    text-align: center;
   }
 
   .info-icon {

@@ -1,0 +1,10 @@
+<div class="menu-container">
+  <button class="menu-trigger" (click)="toggle($event)" title="Acciones">
+    &#8942;
+  </button>
+
+  <div *ngIf="isOpen" class="menu-dropdown" (click)="$event.stopPropagation()">
+    <button class="menu-item" (click)="onEdit()">Editar</button>
+    <button class="menu-item menu-item-delete" (click)="onDelete()">Eliminar</button>
+  </div>
+</div>

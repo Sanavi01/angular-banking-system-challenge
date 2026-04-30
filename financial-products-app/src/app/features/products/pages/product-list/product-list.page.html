@@ -24,6 +24,7 @@
         [products]="(state.paginatedProducts$ | async) ?? []"
         [loading]="(loading$ | async) ?? false"
         [error]="error$ | async"
+        (edit)="onEditProduct($event)"
       ></app-product-table>
 
       <!-- Footer with pagination -->

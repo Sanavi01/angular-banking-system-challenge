@@ -35,6 +35,7 @@
           Fecha de reestructuración
           <span class="info-icon" title="Fecha programada para revisión del producto">&#9432;</span>
         </th>
+        <th class="col-actions"></th>
       </tr>
     </thead>
     <tbody>
@@ -56,6 +57,13 @@
         <td class="col-desc">{{ product.description }}</td>
         <td class="col-date">{{ product.date_release | dateDisplay }}</td>
         <td class="col-date">{{ product.date_revision | dateDisplay }}</td>
+        <td class="col-actions">
+          <app-product-menu
+            [productId]="product.id"
+            (edit)="edit.emit($event)"
+            (delete)="delete.emit($event)"
+          ></app-product-menu>
+        </td>
       </tr>
     </tbody>
   </table>
