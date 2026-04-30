@@ -39,6 +39,29 @@ $color-white: #ffffff;
       letter-spacing: 1px;
     }
   }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-add {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #ffc107;
+    color: #333333;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: darken(#ffc107, 8%);
+    }
+  }
 }
 
 .main {

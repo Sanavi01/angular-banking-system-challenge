@@ -6,10 +6,13 @@
         <span class="brand-icon">🏦</span>
         <span class="brand-text">BANCO</span>
       </div>
-      <app-product-search
-        placeholder="Search..."
-        (searchChange)="state.setSearchTerm($event)"
-      ></app-product-search>
+      <div class="header-actions">
+        <app-product-search
+          placeholder="Search..."
+          (searchChange)="state.setSearchTerm($event)"
+        ></app-product-search>
+        <button class="btn-add" routerLink="/products/add">Agregar</button>
+      </div>
     </div>
   </header>
 
